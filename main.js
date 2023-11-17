@@ -367,6 +367,10 @@ function gPush() {
     MS.push(modelMatrix) ;
 }
 
+var elapsedTime = 0.0;
+var lastResetTime = 0.0;
+var resetInterval = 3.0; // 3 seconds intervals for animation
+
 function render() {
 
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -400,15 +404,28 @@ function render() {
     var curTime ;
     if( animFlag )
     {
-        curTime = (new Date()).getTime() /1000 ;
+        curTime = (new Date()).getTime() / 1000 ;
+
         if( resetTimerFlag ) {
             prevTime = curTime ;
             resetTimerFlag = false ;
         }
+
         TIME = TIME + curTime - prevTime ;
         prevTime = curTime ;
 
+        // The below section of code is used to updated and reset the elapsedTime variable which acts as a counter
+        // for drawing bubbles. An interval is declared as a target time to reach (ex. 6 seconds) When the real TIME
+        // passes the interval time (after the last time the interval was reset) the elapsed time is set back to 0
+        elapsedTime = TIME % resetInterval;
+
+        if (TIME - lastResetTime >= resetInterval) {
+            elapsedTime = 0.0;
+            lastResetTime = TIME;
+        }
+
     }
+
 
 
     gl.activeTexture(gl.TEXTURE0);
@@ -427,59 +444,206 @@ function render() {
 
     // Rotates an object from angle a to angle b in a set time interval
     // Also set the speed (in terms of frequency) between oscillations
-    function setRotation(time, a, b, interval) {
+    function setRotation(a, b, interval) {
         // Calculate the progress of time within the duration
-        const progress = Math.min(1, time / interval);
+        const rotateIn = Math.min(1, elapsedTime / interval);
 
-        // Linear interpolation (lerp) between a and b
-        return a + (b - a) * progress;
+        // Linear interpolation between a and b
+        return a + (b - a) * rotateIn;
     }
 
     // Set the translation speed and distance
-    function setTranslation( time, speed, distance ) {
+    function setTranslation( interval, distance ) {
 
-        return Math.cos(time * speed ) * distance;
+        const translateIn = Math.min(1, elapsedTime / interval);
+
+        return translateIn * distance;
+    }
+
+    // Sets translations and rotations for the palm given from time series values in the animatePalm function
+    function utilityRTI(rotations, translations, interval){
+
+        let rotateX = 0;
+        let rotateY = 0;
+        let rotateZ = 0;
+        let translateX = 0;
+        let translateY = 0;
+        let translateZ = 0;
+
+        translateX = setTranslation(interval, translations.distanceX);
+        translateY = setTranslation(interval, translations.distanceY);
+        translateZ = setTranslation(interval, translations.distanceZ);
+
+        rotateX = setRotation(rotations.rotXFrom, rotations.rotXTo, interval);
+        rotateY = setRotation(rotations.rotYFrom, rotations.rotYTo, interval);
+        rotateZ = setRotation(rotations.rotZFrom, rotations.rotZTo, interval);
+
+        return {
+            translateX: translateX,
+            translateY: translateY,
+            translateZ: translateZ,
+            rotateX: rotateX,
+            rotateY: rotateY,
+            rotateZ: rotateZ,
+        };
+
+    }
+
+    function animatePalm(){
+
+        var interval = 0;
+        let struct;
+
+        const palmAnimation = { // Animation variable control
+            // Palm time series rotations
+            0: {
+                time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}, // testing
+                time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}, // testing
+                /*time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 70, rotZFrom: 0, rotZTo: 90},
+                time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 70, rotYTo: 70, rotZFrom: 90, rotZTo: 90},
+
+                 */
+            },
+            // Palm time series translations
+            1: {
+                time1: { distanceX: 0, distanceY: 0, distanceZ: 5 },
+                time2: { distanceX: 0, distanceY: 0, distanceZ: -5 },
+            },
+
+        };
+
+        if(TIME <= 3.0){
+
+            interval = 2;
+            const rotations = palmAnimation[0].time1;
+            const translations = palmAnimation[1].time1;
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(3.0 < TIME && TIME <= 6.0){
+
+            interval = 2;
+            const rotations = palmAnimation[0].time2;
+            const translations = palmAnimation[1].time2;
+            const prevPos = palmAnimation[1].time1; // previous position of translation
+
+            gTranslate(prevPos.distanceX, prevPos.distanceY, prevPos.distanceZ)
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        gTranslate(struct.translateX, struct.translateY, struct.translateZ);
+
+        gRotate(struct.rotateX,1,0,0);
+        gRotate(struct.rotateY,0,1,0); // use
+        gRotate(struct.rotateZ,0,0,1);
+
+    }
+
+    function rotateFinger(knuckle_id, start_b, end_b, start_f, end_f, start_s, end_s, interval){
+
+        if(knuckle_id === 1){
+            // Rotate the base knuckle 0-30 degrees in a 2-second interval
+            return setRotation(start_b, end_b, interval);
+        }
+
+        if(knuckle_id === 2){
+            // Rotate the first knuckle 0-30 degrees in a 2-second interval
+            return setRotation(start_f, end_f, interval);
+        }
+
+        if(knuckle_id === 3){
+            // Rotate the second knuckle 0-50 degrees in a 2-second interval
+            return setRotation(start_s, end_s, interval);
+        }
+
+
     }
 
     // Animation handler for all things time
-    function animateHand(time, a, b){
+    function animateFingers(finger_id, knuckle_id){
 
-        if(time <= 3.0){
-            return setRotation(time, a, b, 2);
+        let rotation = 0; // initialize rotation to default position
+
+        var interval = 0;
+
+        const fingerRotations = { // Animation variable control
+            // Finger 1
+            1: {
+                // create a time-series of rotations for animation
+                // (baseRotFrom/baseRotTo) base knuckle rotation angle from --- to
+                // (firstRotFrom/firstRotTo) first knuckle rotation angle from --- to
+                // (secondRotFrom/secondRotTo) second knuckle rotation angle from --- to
+                time1: { baseRotFrom: 0, baseRotTo: 30, firstRotFrom: 0, firstRotTo: 20, secondRotFrom: 0, secondRotTo: 20 },
+                time2: { baseRotFrom: 30, baseRotTo: 30, firstRotFrom: 20, firstRotTo: 20, secondRotFrom: 20, secondRotTo: 20 }
+            },
+            // Finger 2
+            2: {
+                time1: { baseRotFrom: 0, baseRotTo: 20, firstRotFrom: 0, firstRotTo: 40, secondRotFrom: 0, secondRotTo: 20 },
+                time2: { baseRotFrom: 20, baseRotTo: 20, firstRotFrom: 40, firstRotTo: 40, secondRotFrom: 20, secondRotTo: 20 }
+            },
+            // Finger 3
+            3: {
+                time1: { baseRotFrom: 0, baseRotTo: 50, firstRotFrom: 0, firstRotTo: 30, secondRotFrom: 0, secondRotTo: 30 },
+                time2: { baseRotFrom: 50, baseRotTo: 50, firstRotFrom: 30, firstRotTo: 30, secondRotFrom: 30, secondRotTo: 30 }
+            },
+            // Finger 4
+            4: {
+                time1: { baseRotFrom: 0, baseRotTo: 40, firstRotFrom: 0, firstRotTo: 30, secondRotFrom: 0, secondRotTo: 20 },
+                time2: { baseRotFrom: 40, baseRotTo: 40, firstRotFrom: 30, firstRotTo: 30, secondRotFrom: 20, secondRotTo: 20 }
+            }
+        };
+
+        if(TIME <= 3.0){ // Time animations in intervals of 3.0 as elapsedtime variable for rotations is 3 seconds
+
+            if (fingerRotations[finger_id]) { // For every finger_id in the struct
+
+                interval = 2;
+                const rotations = fingerRotations[finger_id].time1; // Predefined rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                                     rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                                     rotations.secondRotTo, interval);
+
+            }
+
         }
 
-        return 0;
+        if(3.0 < TIME && TIME <= 6.0) { // Time
+
+            if (fingerRotations[finger_id]) { // Finger
+
+                interval = 2;
+                const rotations = fingerRotations[finger_id].time2; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
+
+
+        return rotation;
     }
 
-    function drawFinger(fig_id, base, time){
+    // Draws fingers with the base
+    function drawFinger(fig_id, base){
 
-        var bRot = 0;
-        var rKnckOne = 0;
-        var rKnckTwo = 0;
-
-        if (fig_id === 1){
-            bRot = 30;
-            rKnckOne = animateHand(time, 0, 30);
-            rKnckTwo = animateHand(time, 0, 50);
-        } else if (fig_id === 2){
-            bRot = 50;
-            rKnckOne = animateHand(time, 0, 40);
-            rKnckTwo = animateHand(time, 0, 60);
-        } else if (fig_id === 3){
-            bRot = 70;
-            rKnckOne = animateHand(time, 0, 50);
-            rKnckTwo = animateHand(time, 0, 70);
-        } else if (fig_id === 4){
-            bRot = 80;
-            rKnckOne = animateHand(time, 0, 60);
-            rKnckTwo = animateHand(time, 0, 80);
-        }
+        var bRot = animateFingers(fig_id, 1);      // base knuckle rotation (front-to-back)
+        var rKnckOne = animateFingers(fig_id, 2);  // first knuckle rotation (front-to-back)
+        var rKnckTwo = animateFingers(fig_id, 3);  // second knuckle rotation (front-to-back)
 
         // Base
         gScale(1/3, 1/2.5, 1/0.7);
 
         gTranslate(base,3,0);
-        gRotate(animateHand(time, 0, bRot), 1,0,0)
+        gRotate(bRot, 1,0,0)
         gScale(0.6,0.6,0.6);
 
         setColor(vec4(0.4,0.4,0.4,1.0));
@@ -605,9 +769,10 @@ function render() {
 
     gPush() ; // Start of Hand
     {
-        gTranslate(4,0,-4);
+        gTranslate(3.5,3,-8);
+        gRotate(50,1,0,0)
 
-        gRotate(TIME*180/3.14159,0,1,0);
+        animatePalm();
         gScale(2.8,2.5,0.7);
 
         setColor(vec4(0.0,1.0,0.0,1.0)) ;
@@ -616,26 +781,26 @@ function render() {
 
         gPush() ; // first finger base
         {
-            drawFinger(1, 2.3, TIME);
+            drawFinger(1, 2.3);
         }
         gPop() ;
 
         gPush() ; // second finger base
         {
-            drawFinger(2,0.75, TIME);
+            drawFinger(2,0.75);
         }
         gPop() ;
 
         gPush() ; // third finger base
         {
-            drawFinger(3, -0.75, TIME);
+            drawFinger(3, -0.75);
         }
         gPop() ;
 
 
         gPush() ; // fourth finger base
         {
-            drawFinger(4, -2.3, TIME);
+            drawFinger(4, -2.3);
         }
         gPop() ;
 
