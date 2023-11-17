@@ -8,7 +8,6 @@ var program ;
 var near = 1;
 var far = 100;
 
-
 var left = -6.0;
 var right = 6.0;
 var ytop = 6.0;
@@ -73,8 +72,6 @@ image2[4*texSize*i+4*j+k] = 255*image1[i][j][k];
 
 
 var textureArray = [] ;
-
-
 
 function isLoaded(im) {
     if (im.complete) {
@@ -428,7 +425,66 @@ function render() {
 
     /****************************** Useful Functions* ******************************/
 
-    function drawFinger(){
+    // Rotates an object from angle a to angle b in a set time interval
+    // Also set the speed (in terms of frequency) between oscillations
+    function setRotation(time, a, b, interval) {
+        // Calculate the progress of time within the duration
+        const progress = Math.min(1, time / interval);
+
+        // Linear interpolation (lerp) between a and b
+        return a + (b - a) * progress;
+    }
+
+    // Set the translation speed and distance
+    function setTranslation( time, speed, distance ) {
+
+        return Math.cos(time * speed ) * distance;
+    }
+
+    // Animation handler for all things time
+    function animateHand(time, a, b){
+
+        if(time <= 3.0){
+            return setRotation(time, a, b, 2);
+        }
+
+        return 0;
+    }
+
+    function drawFinger(fig_id, base, time){
+
+        var bRot = 0;
+        var rKnckOne = 0;
+        var rKnckTwo = 0;
+
+        if (fig_id === 1){
+            bRot = 30;
+            rKnckOne = animateHand(time, 0, 30);
+            rKnckTwo = animateHand(time, 0, 50);
+        } else if (fig_id === 2){
+            bRot = 50;
+            rKnckOne = animateHand(time, 0, 40);
+            rKnckTwo = animateHand(time, 0, 60);
+        } else if (fig_id === 3){
+            bRot = 70;
+            rKnckOne = animateHand(time, 0, 50);
+            rKnckTwo = animateHand(time, 0, 70);
+        } else if (fig_id === 4){
+            bRot = 80;
+            rKnckOne = animateHand(time, 0, 60);
+            rKnckTwo = animateHand(time, 0, 80);
+        }
+
+        // Base
+        gScale(1/3, 1/2.5, 1/0.7);
+
+        gTranslate(base,3,0);
+        gRotate(animateHand(time, 0, bRot), 1,0,0)
+        gScale(0.6,0.6,0.6);
+
+        setColor(vec4(0.4,0.4,0.4,1.0));
+        drawSphere();
+
         gPush() ; // first finger bone
         {
             gScale(1/0.6,1/0.6,1/0.6) ;
@@ -447,6 +503,7 @@ function render() {
                 gRotate(-90,1,0,0)
 
                 gTranslate(0, 1.1, 0);
+                gRotate(rKnckOne, 1, 0,0); // Front-to back finger rotation
                 gScale(0.5, 0.5, 0.5);
 
                 setColor(vec4(0.4, 0.4, 0.4, 1.0));
@@ -469,6 +526,7 @@ function render() {
                         gRotate(-90, 1, 0, 0)
 
                         gTranslate(0, 1, 0);
+                        gRotate(rKnckTwo, 1, 0,0);
                         gScale(0.5, 0.5, 0.5);
 
                         setColor(vec4(0.4, 0.4, 0.4, 1.0));
@@ -558,54 +616,26 @@ function render() {
 
         gPush() ; // first finger base
         {
-            gScale(1/3, 1/2.5, 1/0.7);
-
-            gTranslate(2.3,3,0);
-            gScale(0.6,0.6,0.6);
-            setColor(vec4(0.4,0.4,0.4,1.0));
-            drawSphere();
-
-            drawFinger();
+            drawFinger(1, 2.3, TIME);
         }
         gPop() ;
 
         gPush() ; // second finger base
         {
-            gScale(1/3, 1/2.5, 1/0.7);
-
-            gTranslate(0.75,3,0);
-            gScale(0.6,0.6,0.6);
-            setColor(vec4(0.4,0.4,0.4,1.0));
-            drawSphere();
-
-            drawFinger();
+            drawFinger(2,0.75, TIME);
         }
         gPop() ;
 
         gPush() ; // third finger base
         {
-            gScale(1/3, 1/2.5, 1/0.7);
-
-            gTranslate(-0.75,3,0);
-            gScale(0.6,0.6,0.6);
-            setColor(vec4(0.4,0.4,0.4,1.0));
-            drawSphere();
-
-            drawFinger();
+            drawFinger(3, -0.75, TIME);
         }
         gPop() ;
 
 
         gPush() ; // fourth finger base
         {
-            gScale(1/3, 1/2.5, 1/0.7);
-
-            gTranslate(-2.3,3,0);
-            gScale(0.6,0.6,0.6);
-            setColor(vec4(0.4,0.4,0.4,1.0));
-            drawSphere();
-
-            drawFinger();
+            drawFinger(4, -2.3, TIME);
         }
         gPop() ;
 
@@ -706,7 +736,6 @@ function CameraController(element) {
     this.dragging = false;
     this.curX = 0;
     this.curY = 0;
-    this.zoom = 1.0;
 
     // Assign a mouse down handler to the HTML element.
     element.onmousedown = function(ev) {
