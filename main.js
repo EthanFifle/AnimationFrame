@@ -570,7 +570,7 @@ function render() {
 
         var interval = 0;
 
-        const fingerRotations = { // Animation variable control
+        const fingerAnimation = { // Animation variable control
             // Finger 1
             1: {
                 // create a time-series of rotations for animation
@@ -587,22 +587,22 @@ function render() {
             },
             // Finger 3
             3: {
-                time1: { baseRotFrom: 0, baseRotTo: 50, firstRotFrom: 0, firstRotTo: 30, secondRotFrom: 0, secondRotTo: 30 },
-                time2: { baseRotFrom: 50, baseRotTo: 50, firstRotFrom: 30, firstRotTo: 30, secondRotFrom: 30, secondRotTo: 30 }
+                time1: { baseRotFrom: 0, baseRotTo: 30, firstRotFrom: 0, firstRotTo: 20, secondRotFrom: 0, secondRotTo: 20 },
+                time2: { baseRotFrom: 30, baseRotTo: 30, firstRotFrom: 20, firstRotTo: 20, secondRotFrom: 20, secondRotTo: 20 }
             },
             // Finger 4
             4: {
-                time1: { baseRotFrom: 0, baseRotTo: 40, firstRotFrom: 0, firstRotTo: 30, secondRotFrom: 0, secondRotTo: 20 },
-                time2: { baseRotFrom: 40, baseRotTo: 40, firstRotFrom: 30, firstRotTo: 30, secondRotFrom: 20, secondRotTo: 20 }
+                time1: { baseRotFrom: 0, baseRotTo: 20, firstRotFrom: 0, firstRotTo: 30, secondRotFrom: 0, secondRotTo: 20 },
+                time2: { baseRotFrom: 20, baseRotTo: 20, firstRotFrom: 30, firstRotTo: 30, secondRotFrom: 20, secondRotTo: 20 }
             }
         };
 
         if(TIME <= 3.0){ // Time animations in intervals of 3.0 as elapsedtime variable for rotations is 3 seconds
 
-            if (fingerRotations[finger_id]) { // For every finger_id in the struct
+            if (fingerAnimation[finger_id]) { // For every finger_id in the struct
 
                 interval = 2;
-                const rotations = fingerRotations[finger_id].time1; // Predefined rotations per knuckle
+                const rotations = fingerAnimation[finger_id].time1; // Predefined rotations per knuckle
 
                 rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
                                      rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
@@ -614,10 +614,10 @@ function render() {
 
         if(3.0 < TIME && TIME <= 6.0) { // Time
 
-            if (fingerRotations[finger_id]) { // Finger
+            if (fingerAnimation[finger_id]) { // Finger
 
                 interval = 2;
-                const rotations = fingerRotations[finger_id].time2; // Rotations per knuckle
+                const rotations = fingerAnimation[finger_id].time2; // Rotations per knuckle
 
                 rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
                     rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
@@ -735,6 +735,38 @@ function render() {
         gPop() ;
     }
 
+
+    function animateBall(){
+
+        let translateX = 0;
+        let translateY = 0;
+        let translateZ = 0;
+
+        let interval = 0;
+
+        const ballAnimation = { // Animation variable control
+            // Palm time series translations
+            1: {
+                time1: { distanceX: 2, distanceY: 0, distanceZ: 0 },
+                //time2: { distanceX: 0, distanceY: 0, distanceZ: 0 },
+            },
+
+        };
+
+        if(3.0 < TIME && TIME <= 6.0){
+
+            interval = 2;
+            const translations = ballAnimation[0].time1;
+
+            translateX = setTranslation(interval, translations.distanceX);
+            translateY = setTranslation(interval, translations.distanceY);
+            translateZ = setTranslation(interval, translations.distanceZ);
+
+        }
+
+        gTranslate(translateX,translateY,translateZ);
+
+    }
     /*************************** End of Useful Functions ***************************/
 
 
@@ -743,11 +775,15 @@ function render() {
 
     // Position everything relative to the center of the screen
     gTranslate(-4,0,0) ;
+
     // Ball
     gPush() ;
     {
         gTranslate(2.8,-4,0);
+
+        animateBall();
         gScale(2,2,2);
+
         setColor(vec4(0.4,0.4,0.4,1.0));
         drawSphere();
     }
