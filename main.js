@@ -116,6 +116,8 @@ function loadImageTexture(tex, image) {
 
 }
 
+// Textures
+
 function initTextures() {
 
     textureArray.push({}) ;
@@ -337,7 +339,6 @@ function drawSphere(texture, name, value, activate) {
 
     Sphere.draw() ;
 }
-
 
 // Draws a cone along z of height 1 centered at the origin
 // and base radius 1.0.
@@ -627,8 +628,6 @@ function render() {
 
         }
 
-
-
         return rotation;
     }
 
@@ -647,7 +646,8 @@ function render() {
         gScale(0.6,0.6,0.6);
 
         setColor(vec4(0.4,0.4,0.4,1.0));
-        drawSphere();
+        drawSphere(textureArray[1], "texture2", 1, gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
         gPush() ; // first finger bone
         {
@@ -671,7 +671,8 @@ function render() {
                 gScale(0.5, 0.5, 0.5);
 
                 setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                drawSphere();
+                drawSphere(textureArray[1], "texture2", 1, gl.TEXTURE1);
+                gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                 gPush(); // second finger bone
                 {
@@ -694,7 +695,8 @@ function render() {
                         gScale(0.5, 0.5, 0.5);
 
                         setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                        drawSphere();
+                        drawSphere(textureArray[1], "texture2", 1, gl.TEXTURE1);
+                        gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                         gPush(); // third finger bone
                         {
@@ -783,6 +785,7 @@ function render() {
 
         setColor(vec4(0.4,0.4,0.4,1.0));
 
+        //drawSphere();
         drawSphere(textureArray[2], "texture3", 2, gl.TEXTURE2);
         gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
     }
@@ -850,7 +853,8 @@ function render() {
             gScale(0.5,0.5,0.5);
 
             setColor(vec4(0.4,0.4,0.4,1.0));
-            drawSphere();
+            drawSphere(textureArray[1], "texture2", 1, gl.TEXTURE1);
+            gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
             gPush() ; // first finger bone
             {
@@ -875,7 +879,8 @@ function render() {
                     gScale(0.45, 0.45, 0.45);
 
                     setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                    drawSphere();
+                    drawSphere(textureArray[1], "texture2", 1, gl.TEXTURE1);
+                    gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                     gPush() ; // first finger bone
                     {
@@ -984,9 +989,10 @@ function render() {
                                 gRotate(40, 1,0,0);
 
                                 gTranslate(0,-1,-1);
-                                gScale(1,1,1);
+                                gScale(0.9,0.9,0.9);
 
-                                drawSphere();
+                                drawSphere(textureArray[1], "texture2", 1, gl.TEXTURE1);
+                                gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
                             }
                             gPop();
                         }
