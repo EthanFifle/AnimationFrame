@@ -70,6 +70,9 @@ precision mediump float;
 uniform sampler2D texture1;
 uniform sampler2D texture2;
 uniform sampler2D texture3;
+uniform sampler2D texture4;
+uniform sampler2D texture5;
+uniform sampler2D texture6;
 uniform int useTextures ;
 
 in vec4 fColor;
@@ -82,7 +85,7 @@ void
 main()
 {
 
-    vec4 c1,c2,c3 ;
+    vec4 c1,c2,c3,c4,c5,c6 ;
 
     fragColor = fColor;
     if( useTextures == 1)
@@ -90,7 +93,10 @@ main()
         c1 = texture( texture1, fTexCoord );
         c2 = texture( texture2, fTexCoord );
         c3 = texture( texture3, fTexCoord );
-        fragColor = fragColor = c1 + c2 + c3;
+        c4 = texture( texture4, fTexCoord );
+        c5 = texture( texture5, fTexCoord );
+        c6 = texture( texture6, fTexCoord );
+        fragColor = fragColor = c1 + c2 + c3 + c4 + c5 + c6;
         // mix(c3, mix(c1, c2, 0.5), 0.7);
     }
     fragColor.a = 1.0 ;
