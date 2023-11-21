@@ -122,11 +122,13 @@ function initTextures() {
     loadFileTexture(textureArray[textureArray.length-1],"sunset.bmp") ;
 
     textureArray.push({}) ;
-    loadFileTexture(textureArray[textureArray.length-1],"cubetexture.png") ;
+    loadFileTexture(textureArray[textureArray.length-1],"Metallic.jpg") ;
+
+    textureArray.push({}) ;
+    loadFileTexture(textureArray[textureArray.length-1],"TennisBall.jpg") ;
 
     textureArray.push({}) ;
     loadImageTexture(textureArray[textureArray.length-1],image2) ;
-
 
 }
 
@@ -313,15 +315,26 @@ function setAllMatrices() {
 
 // Draws a 2x2x2 cube center at the origin
 // Sets the modelview matrix and the normal matrix of the global program
-function drawCube() {
+function drawCube(texture, name, value, activate) {
+
     setMV() ;
+
+    gl.activeTexture(activate);
+    gl.bindTexture(gl.TEXTURE_2D, texture.textureWebGL);
+    gl.uniform1i(gl.getUniformLocation(program, name), value);
+
     Cube.draw() ;
 }
 
 // Draws a sphere centered at the origin of radius 1.0.
 // Sets the modelview matrix and the normal matrix of the global program
-function drawSphere() {
+function drawSphere(texture, name, value, activate) {
     setMV() ;
+
+    gl.activeTexture(activate);
+    gl.bindTexture(gl.TEXTURE_2D, texture.textureWebGL);
+    gl.uniform1i(gl.getUniformLocation(program, name), value);
+
     Sphere.draw() ;
 }
 
@@ -379,7 +392,7 @@ function render() {
     eye = vec3(0,0,25);
     eye[1] = eye[1] + 0 ;
 
-    let distance = 10; // adjust this value to control the distance of the camera
+    let distance = 20; // adjust this value to control the distance of the camera
     projectionMatrix = ortho(-distance, distance, -distance, distance, near, far);
 
     // set the projection matrix
@@ -425,20 +438,6 @@ function render() {
         }
 
     }
-
-
-
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
-    gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
-
-    gl.activeTexture(gl.TEXTURE1);
-    gl.bindTexture(gl.TEXTURE_2D, textureArray[1].textureWebGL);
-    gl.uniform1i(gl.getUniformLocation(program, "texture2"), 1);
-
-    gl.activeTexture(gl.TEXTURE2);
-    gl.bindTexture(gl.TEXTURE_2D, textureArray[2].textureWebGL);
-    gl.uniform1i(gl.getUniformLocation(program, "texture3"), 2);
 
     /****************************** Useful Functions* ******************************/
 
@@ -491,22 +490,23 @@ function render() {
 
     function animatePalm(){
 
-        var interval = 0;
+        var interval = 3;
         let struct;
 
         const palmAnimation = { // Animation variable control
             // Palm time series rotations
             0: {
-                time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}, // testing
+                /*time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}, // testing
                 time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}, // testing
-                /*time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 70, rotZFrom: 0, rotZTo: 90},
-                time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 70, rotYTo: 70, rotZFrom: 90, rotZTo: 90},
 
                  */
+                time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 50, rotZFrom: 0, rotZTo: 65},
+                time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 50, rotYTo: 50, rotZFrom: 65, rotZTo: 65},
+
             },
             // Palm time series translations
             1: {
-                time1: { distanceX: 0, distanceY: 0, distanceZ: 5 },
+                time1: { distanceX: 0, distanceY: 2, distanceZ: 5 },
                 time2: { distanceX: 0, distanceY: 0, distanceZ: -5 },
             },
 
@@ -514,7 +514,7 @@ function render() {
 
         if(TIME <= 3.0){
 
-            interval = 2;
+            //interval = 2;
             const rotations = palmAnimation[0].time1;
             const translations = palmAnimation[1].time1;
 
@@ -524,7 +524,7 @@ function render() {
 
         if(3.0 < TIME && TIME <= 6.0){
 
-            interval = 2;
+            //interval = 2;
             const rotations = palmAnimation[0].time2;
             const translations = palmAnimation[1].time2;
             const prevPos = palmAnimation[1].time1; // previous position of translation
@@ -568,7 +568,7 @@ function render() {
 
         let rotation = 0; // initialize rotation to default position
 
-        var interval = 0;
+        var interval = 3;
 
         const fingerAnimation = { // Animation variable control
             // Finger 1
@@ -601,7 +601,7 @@ function render() {
 
             if (fingerAnimation[finger_id]) { // For every finger_id in the struct
 
-                interval = 2;
+                //interval = 2.5;
                 const rotations = fingerAnimation[finger_id].time1; // Predefined rotations per knuckle
 
                 rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
@@ -616,7 +616,7 @@ function render() {
 
             if (fingerAnimation[finger_id]) { // Finger
 
-                interval = 2;
+                //interval = 2;
                 const rotations = fingerAnimation[finger_id].time2; // Rotations per knuckle
 
                 rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
@@ -735,7 +735,6 @@ function render() {
         gPop() ;
     }
 
-
     function animateBall(){
 
         let translateX = 0;
@@ -747,7 +746,7 @@ function render() {
         const ballAnimation = { // Animation variable control
             // Palm time series translations
             1: {
-                time1: { distanceX: 2, distanceY: 0, distanceZ: 0 },
+                time1: { distanceX: 4, distanceY: 0, distanceZ: 0 },
                 //time2: { distanceX: 0, distanceY: 0, distanceZ: 0 },
             },
 
@@ -755,8 +754,8 @@ function render() {
 
         if(3.0 < TIME && TIME <= 6.0){
 
-            interval = 2;
-            const translations = ballAnimation[0].time1;
+            interval = 1;
+            const translations = ballAnimation[1].time1;
 
             translateX = setTranslation(interval, translations.distanceX);
             translateY = setTranslation(interval, translations.distanceY);
@@ -768,8 +767,6 @@ function render() {
 
     }
     /*************************** End of Useful Functions ***************************/
-
-
 
     /************************* Scene Set Up *************************/
 
@@ -785,7 +782,9 @@ function render() {
         gScale(2,2,2);
 
         setColor(vec4(0.4,0.4,0.4,1.0));
-        drawSphere();
+
+        drawSphere(textureArray[2], "texture3", 2, gl.TEXTURE2);
+        gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
     }
     gPop() ;
     // Ground
@@ -794,7 +793,9 @@ function render() {
         gTranslate(4,-8,0);
         gScale(19,2,10);
         setColor(vec4(0.0,0.0,0.0,1.0));
-        drawCube();
+
+        drawCube(textureArray[0], "texture1", 0, gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
     }
     gPop() ;
 
@@ -812,7 +813,9 @@ function render() {
         gScale(2.8,2.5,0.7);
 
         setColor(vec4(0.0,1.0,0.0,1.0)) ;
-        drawCube() ;
+
+        drawCube(textureArray[1],"texture2", 1, gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
 
         gPush() ; // first finger base
@@ -913,6 +916,104 @@ function render() {
 
     }
     gPop() ; // End of Hand
+
+    gPush(); // Lamp Base
+    {
+        gTranslate(18,-5.8,4);
+        gRotate(70, 0,1,0);
+        gScale(4,0.3,2);
+
+        drawCube(textureArray[1],"texture2", 1, gl.TEXTURE1);
+
+        gPush(); // aesthetic base
+        {
+            gScale(1/4,1/0.3,1/2);
+
+            gTranslate(0,0.3,0);
+            gScale(1.5,0.3,0.8);
+
+            drawCube(textureArray[1],"texture2", 2, gl.TEXTURE1);
+
+            gPush(); // aesthetic base 2
+            {
+                gScale(1/1.5,1/0.3,1/0.8);
+
+                gTranslate(0,0.5,0);
+                gRotate(90, 0,1,0);
+                gScale(0.5,0.5,1.1);
+
+                drawCylinder();
+
+                gPush(); // first base arm
+                {
+                    gScale(1/0.5,1/0.5,1/1.1);
+                    gRotate(-90, 0,1,0);
+
+                    gTranslate(0.5,3.5,2);
+                    gRotate(120, 1,0,0);
+
+                    gScale(0.5,0.5,8.5);
+
+                    drawCylinder();
+
+                    gPush(); // second arm
+                    {
+                        gScale(1/0.5,1/0.5,1/8.5);
+                        gRotate(-120, 1,0,0);
+
+                        gTranslate(-0.5,7,-1);
+                        gRotate(50, 1,0,0);
+                        gScale(0.5,0.5,10);
+
+                        drawCylinder();
+
+                        gPush(); // Lamp Head
+                        {
+                            gScale(1/0.5,1/0.5,1/10);
+                            gRotate(-50, 1,0,0);
+
+                            gTranslate(0,4,-3);
+                            gRotate(-40, 1,0,0);
+                            gScale(1.5,1.5,5);
+
+                            drawCone();
+
+                            gPush(); // Lamp light
+                            {
+                                gScale(1/1.5,1/1.5,1/5);
+                                gRotate(40, 1,0,0);
+
+                                gTranslate(0,-1,-1);
+                                gScale(1,1,1);
+
+                                drawSphere();
+                            }
+                            gPop();
+                        }
+                        gPop();
+                    }
+                    gPop();
+                }
+                gPop();
+
+                gPush(); // second base arm
+                {
+                    gScale(1/0.5,1/0.5,1/1.1);
+                    gRotate(-90, 0,1,0);
+
+                    gTranslate(-0.5,3.5,2);
+                    gRotate(120, 1,0,0);
+                    gScale(0.5,0.5,8.5);
+
+                    drawCylinder();
+                }
+                gPop();
+            }
+            gPop();
+        }
+        gPop();
+    }
+    gPop();
 
 
     if( animFlag )
