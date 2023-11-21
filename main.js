@@ -828,7 +828,6 @@ function render() {
 
     /******************************Start of Code of Hand*******************************/
 
-
     gPush() ; // Start of Hand
     {
         gTranslate(3.5,3,-8);
@@ -1052,7 +1051,6 @@ function render() {
         gPop();
     }
     gPop();
-
 
     if( animFlag )
         window.requestAnimFrame(render);
