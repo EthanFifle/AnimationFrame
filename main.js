@@ -412,7 +412,7 @@ function render() {
     eye = vec3(0,0,25);
     eye[1] = eye[1] + 0 ;
 
-    let distance = 20; // adjust this value to control the distance of the camera
+    let distance = 10; // adjust this value to control the distance of the camera
     projectionMatrix = ortho(-distance, distance, -distance, distance, near, far);
 
     // set the projection matrix
@@ -437,6 +437,9 @@ function render() {
     var curTime ;
     if( animFlag )
     {
+
+        //animateCamera();
+
         curTime = (new Date()).getTime() / 1000 ;
 
         if( resetTimerFlag ) {
@@ -477,6 +480,60 @@ function render() {
         const translateIn = Math.min(1, elapsedTime / interval);
 
         return translateIn * distance;
+    }
+
+    function animateCamera(){
+
+        var interval = 3;
+        let struct;
+
+        const cameraAnimation = { // Animation variable control
+            // Camera time series rotations
+            0: {
+                /*time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}, // testing
+                time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}, // testing
+
+                 */
+                time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 50, rotZFrom: 0, rotZTo: 0},
+                time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 50, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
+
+            },
+            // Camera time series translations
+            1: {
+                time1: { distanceX: 0, distanceY: 0, distanceZ: 0 },
+                time2: { distanceX: 0, distanceY: 0, distanceZ: 0 },
+            },
+
+        };
+
+        if(TIME <= 3.0){
+
+            //interval = 2;
+            const rotations = cameraAnimation[0].time1;
+            const translations = cameraAnimation[1].time1;
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(3.0 < TIME && TIME <= 6.0){
+
+            //interval = 2;
+            const rotations = cameraAnimation[0].time2;
+            const translations = cameraAnimation[1].time2;
+            const prevPos = cameraAnimation[1].time1; // previous position of translation
+
+            gTranslate(prevPos.distanceX, prevPos.distanceY, prevPos.distanceZ)
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        //gTranslate(struct.translateX, struct.translateY, struct.translateZ);
+
+        gRotate(struct.rotateX,1,0,0);
+        gRotate(struct.rotateY,0,1,0);
+        gRotate(struct.rotateZ,0,0,1);
     }
 
     // Sets translations and rotations for the palm given from time series values in the animatePalm function
@@ -520,14 +577,16 @@ function render() {
                 time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}, // testing
 
                  */
-                time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 50, rotZFrom: 0, rotZTo: 65},
-                time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 50, rotYTo: 50, rotZFrom: 65, rotZTo: 65},
+                time1: { rotXFrom: 0, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
+                time2: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 40},
+                time3: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 40, rotZTo: -40},
 
             },
             // Palm time series translations
             1: {
-                time1: { distanceX: 0, distanceY: 2, distanceZ: 5 },
-                time2: { distanceX: 0, distanceY: 0, distanceZ: -5 },
+                time1: { distanceX: 0, distanceY: 6, distanceZ: -3 },
+                time2: { distanceX: 0, distanceY: 0, distanceZ: 0 },
+                time3: { distanceX: 0, distanceY: 0, distanceZ: 0 },
             },
 
         };
@@ -548,6 +607,19 @@ function render() {
             const rotations = palmAnimation[0].time2;
             const translations = palmAnimation[1].time2;
             const prevPos = palmAnimation[1].time1; // previous position of translation
+
+            gTranslate(prevPos.distanceX, prevPos.distanceY, prevPos.distanceZ)
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(6.0 < TIME && TIME <= 9.0){
+
+            //interval = 2;
+            const rotations = palmAnimation[0].time3;
+            const translations = palmAnimation[1].time3;
+            const prevPos = palmAnimation[1].time1; // previous position of translation (that was changed)
 
             gTranslate(prevPos.distanceX, prevPos.distanceY, prevPos.distanceZ)
 
@@ -597,23 +669,23 @@ function render() {
                 // (baseRotFrom/baseRotTo) base knuckle rotation angle from --- to
                 // (firstRotFrom/firstRotTo) first knuckle rotation angle from --- to
                 // (secondRotFrom/secondRotTo) second knuckle rotation angle from --- to
-                time1: { baseRotFrom: 0, baseRotTo: 30, firstRotFrom: 0, firstRotTo: 20, secondRotFrom: 0, secondRotTo: 20 },
-                time2: { baseRotFrom: 30, baseRotTo: 30, firstRotFrom: 20, firstRotTo: 20, secondRotFrom: 20, secondRotTo: 20 }
+                time1: { baseRotFrom: 20, baseRotTo: 10, firstRotFrom: 20, firstRotTo: 10, secondRotFrom: 20, secondRotTo: 10 },
+                time2: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 10, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 }
             },
             // Finger 2
             2: {
-                time1: { baseRotFrom: 0, baseRotTo: 20, firstRotFrom: 0, firstRotTo: 40, secondRotFrom: 0, secondRotTo: 20 },
-                time2: { baseRotFrom: 20, baseRotTo: 20, firstRotFrom: 40, firstRotTo: 40, secondRotFrom: 20, secondRotTo: 20 }
+                time1: { baseRotFrom: 20, baseRotTo: 10, firstRotFrom: 20, firstRotTo: 10, secondRotFrom: 20, secondRotTo: 10 },
+                time2: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 10, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 }
             },
             // Finger 3
             3: {
-                time1: { baseRotFrom: 0, baseRotTo: 30, firstRotFrom: 0, firstRotTo: 20, secondRotFrom: 0, secondRotTo: 20 },
-                time2: { baseRotFrom: 30, baseRotTo: 30, firstRotFrom: 20, firstRotTo: 20, secondRotFrom: 20, secondRotTo: 20 }
+                time1: { baseRotFrom: 20, baseRotTo: 10, firstRotFrom: 20, firstRotTo: 10, secondRotFrom: 20, secondRotTo: 10 },
+                time2: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 10, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 }
             },
             // Finger 4
             4: {
-                time1: { baseRotFrom: 0, baseRotTo: 20, firstRotFrom: 0, firstRotTo: 30, secondRotFrom: 0, secondRotTo: 20 },
-                time2: { baseRotFrom: 20, baseRotTo: 20, firstRotFrom: 30, firstRotTo: 30, secondRotFrom: 20, secondRotTo: 20 }
+                time1: { baseRotFrom: 20, baseRotTo: 10, firstRotFrom: 20, firstRotTo: 10, secondRotFrom: 20, secondRotTo: 10 },
+                time2: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 10, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 }
             }
         };
 
@@ -830,8 +902,8 @@ function render() {
 
     gPush() ; // Start of Hand
     {
-        gTranslate(3.5,3,-8);
-        gRotate(50,1,0,0)
+        gTranslate(3.5,1,-8);
+        gRotate(80,1,0,0)
 
         animatePalm();
         gScale(2.8,2.5,0.7);
