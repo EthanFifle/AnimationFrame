@@ -403,6 +403,7 @@ function gPush() {
 var elapsedTime = 0.0;
 var lastResetTime = 0.0;
 var resetInterval = 3.0; // 3 seconds intervals for animation
+let distance = 10;  // adjust this value to control the distance of the camera
 
 function render() {
 
@@ -412,7 +413,6 @@ function render() {
     eye = vec3(0,0,25);
     eye[1] = eye[1] + 0 ;
 
-    let distance = 10; // adjust this value to control the distance of the camera
     projectionMatrix = ortho(-distance, distance, -distance, distance, near, far);
 
     // set the projection matrix
@@ -438,7 +438,7 @@ function render() {
     if( animFlag )
     {
 
-        //animateCamera();
+        animateCamera();
 
         curTime = (new Date()).getTime() / 1000 ;
 
@@ -482,6 +482,24 @@ function render() {
         return translateIn * distance;
     }
 
+    function utilityRIC(rotations, interval){
+
+        let rotateX = 0;
+        let rotateY = 0;
+        let rotateZ = 0;
+
+        rotateX = setRotation(rotations.rotXFrom, rotations.rotXTo, interval);
+        rotateY = setRotation(rotations.rotYFrom, rotations.rotYTo, interval);
+        rotateZ = setRotation(rotations.rotZFrom, rotations.rotZTo, interval);
+
+        return {
+            rotateX: rotateX,
+            rotateY: rotateY,
+            rotateZ: rotateZ,
+        };
+
+    }
+
     function animateCamera(){
 
         var interval = 3;
@@ -489,47 +507,40 @@ function render() {
 
         const cameraAnimation = { // Animation variable control
             // Camera time series rotations
-            0: {
-                /*time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}, // testing
-                time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}, // testing
-
-                 */
-                time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 50, rotZFrom: 0, rotZTo: 0},
-                time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 50, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
-
-            },
-            // Camera time series translations
-            1: {
-                time1: { distanceX: 0, distanceY: 0, distanceZ: 0 },
-                time2: { distanceX: 0, distanceY: 0, distanceZ: 0 },
-            },
+            time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 50, rotZFrom: 0, rotZTo: 0},
+            time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 50, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
+            time3: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: -50, rotZFrom: 0, rotZTo: 0},
 
         };
 
         if(TIME <= 3.0){
 
+            distance += setTranslation(interval, 0.1);
             //interval = 2;
-            const rotations = cameraAnimation[0].time1;
-            const translations = cameraAnimation[1].time1;
+            const rotations = cameraAnimation.time1;
 
-            struct = utilityRTI(rotations, translations, interval);
+            struct = utilityRIC(rotations, interval);
 
         }
 
         if(3.0 < TIME && TIME <= 6.0){
 
             //interval = 2;
-            const rotations = cameraAnimation[0].time2;
-            const translations = cameraAnimation[1].time2;
-            const prevPos = cameraAnimation[1].time1; // previous position of translation
+            const rotations = cameraAnimation.time2;
 
-            gTranslate(prevPos.distanceX, prevPos.distanceY, prevPos.distanceZ)
-
-            struct = utilityRTI(rotations, translations, interval);
+            struct = utilityRIC(rotations, interval);
 
         }
 
-        //gTranslate(struct.translateX, struct.translateY, struct.translateZ);
+        if(6.0 < TIME && TIME <= 9.0){
+
+            distance -= setTranslation(interval, 0.1);
+            //interval = 2;
+            const rotations = cameraAnimation.time3;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
 
         gRotate(struct.rotateX,1,0,0);
         gRotate(struct.rotateY,0,1,0);
@@ -577,9 +588,9 @@ function render() {
                 time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}, // testing
 
                  */
-                time1: { rotXFrom: 0, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
-                time2: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 40},
-                time3: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 40, rotZTo: -40},
+                time1: { rotXFrom: 0, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 40},
+                time2: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 40, rotZTo: -40},
+                time3: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: -40, rotZTo: 40},
 
             },
             // Palm time series translations
