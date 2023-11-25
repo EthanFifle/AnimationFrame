@@ -438,7 +438,7 @@ function render() {
     if( animFlag )
     {
 
-        //animateCamera();
+        animateCamera();
 
         curTime = (new Date()).getTime() / 1000 ;
 
@@ -507,17 +507,28 @@ function render() {
 
         const cameraAnimation = { // Animation variable control
             // Camera time series rotations
-            time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 50, rotZFrom: 0, rotZTo: 0},
-            time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: 50, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
-            time3: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: -50, rotZFrom: 0, rotZTo: 0},
+            time0: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}, // don't rotate initially
+            time1: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: -180, rotZFrom: 0, rotZTo: 0},
+            time2: { rotXFrom: 0, rotXTo: 0, rotYFrom: -180, rotYTo: -360, rotZFrom: 0, rotZTo: 0},
+            time3: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 50, rotZFrom: 0, rotZTo: 0},
+            time4: { rotXFrom: 0, rotXTo: 0, rotYFrom: 50, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
+            time5: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: -50, rotZFrom: 0, rotZTo: 0},
+            time6: { rotXFrom: 0, rotXTo: 0, rotYFrom: -50, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
+            time7: { rotXFrom: 0, rotXTo: -10, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
+            time8: { rotXFrom: -10, rotXTo: 30, rotYFrom: 0, rotYTo: 70, rotZFrom: 0, rotZTo: 0},
+            time9: { rotXFrom: 30, rotXTo: 30, rotYFrom: 70, rotYTo: -430, rotZFrom: 0, rotZTo: 0},
+            time10: { rotXFrom: 30, rotXTo: 0, rotYFrom: -70, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
+            time11: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: -120},
+            time12: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: -120, rotZTo: -240},
+            time13: { rotXFrom: 0, rotXTo: 0, rotYFrom: 0, rotYTo: 0, rotZFrom: -240, rotZTo: -360}
 
         };
 
         if(TIME <= 3.0){
 
-            distance += setTranslation(interval, 0.1);
-            //interval = 2;
-            const rotations = cameraAnimation.time1;
+            distance += setTranslation(interval, 0.07);
+
+            const rotations = cameraAnimation.time0;
 
             struct = utilityRIC(rotations, interval);
 
@@ -525,8 +536,7 @@ function render() {
 
         if(3.0 < TIME && TIME <= 6.0){
 
-            //interval = 2;
-            const rotations = cameraAnimation.time2;
+            const rotations = cameraAnimation.time1;
 
             struct = utilityRIC(rotations, interval);
 
@@ -534,9 +544,111 @@ function render() {
 
         if(6.0 < TIME && TIME <= 9.0){
 
-            distance -= setTranslation(interval, 0.1);
-            //interval = 2;
+            const rotations = cameraAnimation.time2;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
+
+        if(9.0 < TIME && TIME <= 12.0){
+
             const rotations = cameraAnimation.time3;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
+
+        if(12.0 < TIME && TIME <= 15.0){
+
+            distance -= setTranslation(interval, 0.07);
+
+            const rotations = cameraAnimation.time4;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
+
+        if(15.0 < TIME && TIME <= 18.0){
+
+            const rotations = cameraAnimation.time5;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
+
+        if(18.0 < TIME && TIME <= 21.0){
+
+            distance -= setTranslation(interval, 0.05);
+
+            const rotations = cameraAnimation.time6;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
+
+        if(21.0 < TIME && TIME <= 24.0){
+
+            distance += setTranslation(interval, 0.07);
+
+            const rotations = cameraAnimation.time7;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
+
+        if(24.0 < TIME && TIME <= 27.0){
+
+            const rotations = cameraAnimation.time8;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
+
+        if(27.0 < TIME && TIME <= 30.0){
+
+            const rotations = cameraAnimation.time9;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
+
+        if(30.0 < TIME && TIME <= 33.0){
+
+            distance += setTranslation(interval, 0.05);
+
+            const rotations = cameraAnimation.time10;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
+
+        if(33.0 < TIME && TIME <= 36.0){
+
+            const rotations = cameraAnimation.time11;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
+
+        if(36.0 < TIME && TIME <= 39.0){
+
+            const rotations = cameraAnimation.time12;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
+
+        if(39.0 < TIME && TIME <= 42.0){
+
+            const rotations = cameraAnimation.time13;
+
+            struct = utilityRIC(rotations, interval);
+
+        }
+
+        if(42.0 < TIME && TIME <= 45.0){
+
+            const rotations = cameraAnimation.time0;
 
             struct = utilityRIC(rotations, interval);
 
@@ -594,6 +706,11 @@ function render() {
                 time4: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 40, rotZTo: 0},
                 time5: { rotXFrom: -90, rotXTo: 15, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
                 time6: { rotXFrom: 15, rotXTo: 15, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
+                time7: { rotXFrom: 15, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 40},
+                time8: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 40, rotZTo: -40},
+                time9: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: -40, rotZTo: 40},
+                time10: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 40, rotZTo: 0},
+                time11: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0}
 
             },
             // Palm time series translations
@@ -710,6 +827,74 @@ function render() {
 
         }
 
+        if(27.0 < TIME && TIME <= 30.0){
+
+            const rotations = palmAnimation[0].time6;
+            const translations = palmAnimation[1].time0;
+
+            gTranslate(-1, 7, -5) // Hard coded from last translated distance
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(30.0 < TIME && TIME <= 33.0){
+
+            const rotations = palmAnimation[0].time7;
+            const translations = palmAnimation[1].time0;
+
+            gTranslate(-1, 7, -5) // Hard coded from last translated distance
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(33.0 < TIME && TIME <= 36.0){
+
+            const rotations = palmAnimation[0].time8;
+            const translations = palmAnimation[1].time0;
+
+            gTranslate(-1, 7, -5) // Hard coded from last translated distance
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(36.0 < TIME && TIME <= 39.0){
+
+            const rotations = palmAnimation[0].time9;
+            const translations = palmAnimation[1].time0;
+
+            gTranslate(-1, 7, -5) // Hard coded from last translated distance
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(39.0 < TIME && TIME <= 42.0){
+
+            interval = 2;
+            const rotations = palmAnimation[0].time10;
+            const translations = palmAnimation[1].time0;
+
+            gTranslate(-1, 7, -5) // Hard coded from last translated distance
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(42.0 < TIME && TIME <= 45.0){
+
+            interval = 2;
+            const rotations = palmAnimation[0].time11;
+            const translations = palmAnimation[1].time0;
+
+            gTranslate(-1, 7, -5) // Hard coded from last translated distance
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
         gTranslate(struct.translateX, struct.translateY, struct.translateZ);
 
         gRotate(struct.rotateX,1,0,0);
@@ -759,6 +944,7 @@ function render() {
                 time5: { baseRotFrom: 30, baseRotTo: 40, firstRotFrom: 25, firstRotTo: 55, secondRotFrom: 20, secondRotTo: 50 },
                 time6: { baseRotFrom: 40, baseRotTo: 40, firstRotFrom: 55, firstRotTo: 55, secondRotFrom: 50, secondRotTo: 50 },
                 time7: { baseRotFrom: 40, baseRotTo: 10, firstRotFrom: 55, firstRotTo: 15, secondRotFrom: 50, secondRotTo: 20 },
+                time8: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 15, firstRotTo: 15, secondRotFrom: 20, secondRotTo: 20 }
 
             },
             // Finger 2
@@ -770,6 +956,7 @@ function render() {
                 time5: { baseRotFrom: 30, baseRotTo: 40, firstRotFrom: 35, firstRotTo: 55, secondRotFrom: 20, secondRotTo: 50 },
                 time6: { baseRotFrom: 40, baseRotTo: 40, firstRotFrom: 55, firstRotTo: 55, secondRotFrom: 50, secondRotTo: 50 },
                 time7: { baseRotFrom: 40, baseRotTo: 10, firstRotFrom: 55, firstRotTo: 15, secondRotFrom: 50, secondRotTo: 20 },
+                time8: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 15, firstRotTo: 15, secondRotFrom: 20, secondRotTo: 20 }
 
             },
             // Finger 3
@@ -781,6 +968,7 @@ function render() {
                 time5: { baseRotFrom: 30, baseRotTo: 40, firstRotFrom: 35, firstRotTo: 55, secondRotFrom: 20, secondRotTo: 50 },
                 time6: { baseRotFrom: 40, baseRotTo: 40, firstRotFrom: 55, firstRotTo: 55, secondRotFrom: 50, secondRotTo: 50 },
                 time7: { baseRotFrom: 40, baseRotTo: 10, firstRotFrom: 55, firstRotTo: 15, secondRotFrom: 50, secondRotTo: 20 },
+                time8: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 15, firstRotTo: 15, secondRotFrom: 20, secondRotTo: 20 }
 
             },
             // Finger 4
@@ -792,6 +980,7 @@ function render() {
                 time5: { baseRotFrom: 30, baseRotTo: 40, firstRotFrom: 35, firstRotTo: 55, secondRotFrom: 20, secondRotTo: 50 },
                 time6: { baseRotFrom: 40, baseRotTo: 40, firstRotFrom: 55, firstRotTo: 55, secondRotFrom: 50, secondRotTo: 50 },
                 time7: { baseRotFrom: 40, baseRotTo: 10, firstRotFrom: 55, firstRotTo: 15, secondRotFrom: 50, secondRotTo: 20 },
+                time8: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 15, firstRotTo: 15, secondRotFrom: 20, secondRotTo: 20 }
 
 
             }
@@ -931,6 +1120,96 @@ function render() {
 
         }
 
+        if(27.0 < TIME && TIME <= 30.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                interval = 1;
+                const rotations = fingerAnimation[finger_id].time8; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
+        if(30.0 < TIME && TIME <= 33.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                interval = 1;
+                const rotations = fingerAnimation[finger_id].time8; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
+        if(33.0 < TIME && TIME <= 36.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                interval = 1;
+                const rotations = fingerAnimation[finger_id].time8; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
+        if(36.0 < TIME && TIME <= 39.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                interval = 1;
+                const rotations = fingerAnimation[finger_id].time8; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
+        if(39.0 < TIME && TIME <= 42.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                interval = 1;
+                const rotations = fingerAnimation[finger_id].time8; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
+        if(42.0 < TIME && TIME <= 45.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                interval = 1;
+                const rotations = fingerAnimation[finger_id].time8; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
         return rotation;
     }
 
@@ -1052,19 +1331,22 @@ function render() {
             // Thumb time series rotations
 
             1: { // knuckle 1 (base)
-                time1: {baseRotFrom: -40, baseRotTo: -70, firstRotFrom: 0, firstRotTo: 0, secondRotFrom: 0, secondRotTo: 0},
-                time2: {baseRotFrom: -70, baseRotTo: -70, firstRotFrom: 0, firstRotTo: 0, secondRotFrom: 0, secondRotTo: 0}
+                time1: {baseRotFrom: -10, baseRotTo: -70, firstRotFrom: 0, firstRotTo: 0, secondRotFrom: 0, secondRotTo: 0},
+                time2: {baseRotFrom: -70, baseRotTo: -70, firstRotFrom: 0, firstRotTo: 0, secondRotFrom: 0, secondRotTo: 0},
+                time3: {baseRotFrom: -70, baseRotTo: -20, firstRotFrom: 0, firstRotTo: 0, secondRotFrom: 0, secondRotTo: 0},
+                time4: {baseRotFrom: -20, baseRotTo: -20, firstRotFrom: 0, firstRotTo: 0, secondRotFrom: 0, secondRotTo: 0}
             },
 
             2: { //knuckle 2
                 time1: {baseRotFrom: 0, baseRotTo: 0, firstRotFrom: 20, firstRotTo: 30, secondRotFrom: 0, secondRotTo: 0},
-                time2: {baseRotFrom: 0, baseRotTo: 0, firstRotFrom: 30, firstRotTo: 30, secondRotFrom: 0, secondRotTo: 0}
+                time2: {baseRotFrom: 0, baseRotTo: 0, firstRotFrom: 30, firstRotTo: 30, secondRotFrom: 0, secondRotTo: 0},
+                time3: {baseRotFrom: 0, baseRotTo: 0, firstRotFrom: 30, firstRotTo: 20, secondRotFrom: 0, secondRotTo: 0},
+                time4: {baseRotFrom: 0, baseRotTo: 0, firstRotFrom: 20, firstRotTo: 20, secondRotFrom: 0, secondRotTo: 0}
             }
         };
 
         if(15.0 < TIME && TIME <= 18.0) { // Time
 
-            //interval = 2;
             const rotations = thumbAnimation[knuckle_id].time1; // Rotations per knuckle
 
             rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
@@ -1075,7 +1357,6 @@ function render() {
 
         if(18.0 < TIME && TIME <= 21.0) { // Time
 
-            //interval = 2;
             const rotations = thumbAnimation[knuckle_id].time2; // Rotations per knuckle
 
             rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
@@ -1086,8 +1367,78 @@ function render() {
 
         if(18.0 < TIME && TIME <= 24.0) { // Time
 
-            //interval = 2;
             const rotations = thumbAnimation[knuckle_id].time2; // Rotations per knuckle
+
+            rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                rotations.secondRotTo, interval);
+
+        }
+
+        if(24.0 < TIME && TIME <= 27.0) { // Time
+
+            interval = 2;
+            const rotations = thumbAnimation[knuckle_id].time3; // Rotations per knuckle
+
+            rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                rotations.secondRotTo, interval);
+
+        }
+
+        if(27.0 < TIME && TIME <= 30.0) { // Time
+
+            const rotations = thumbAnimation[knuckle_id].time4; // Rotations per knuckle
+
+            rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                rotations.secondRotTo, interval);
+
+        }
+
+        if(30.0 < TIME && TIME <= 33.0) { // Time
+
+            const rotations = thumbAnimation[knuckle_id].time4; // Rotations per knuckle
+
+            rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                rotations.secondRotTo, interval);
+
+        }
+
+        if(33.0 < TIME && TIME <= 36.0) { // Time
+
+            const rotations = thumbAnimation[knuckle_id].time4; // Rotations per knuckle
+
+            rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                rotations.secondRotTo, interval);
+
+        }
+
+        if(36.0 < TIME && TIME <= 39.0) { // Time
+
+            const rotations = thumbAnimation[knuckle_id].time4; // Rotations per knuckle
+
+            rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                rotations.secondRotTo, interval);
+
+        }
+
+        if(39.0 < TIME && TIME <= 42.0) { // Time
+
+            const rotations = thumbAnimation[knuckle_id].time4; // Rotations per knuckle
+
+            rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                rotations.secondRotTo, interval);
+
+        }
+
+        if(42.0 < TIME && TIME <= 45.0) { // Time
+
+            const rotations = thumbAnimation[knuckle_id].time4; // Rotations per knuckle
 
             rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
                 rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
@@ -1195,6 +1546,7 @@ function render() {
 
             time0: { distanceX: 0, distanceY: 0, distanceZ: 0 }, // Don't move
             time1: { distanceX: 0, distanceY: 8, distanceZ: 0 },
+            time2: { distanceX: 0, distanceY: -8, distanceZ: 0 },
 
         };
 
@@ -1208,11 +1560,23 @@ function render() {
 
         if(21.0 < TIME && TIME <= 24.0) { // Time
 
-            gTranslate(0,8,0)
+            gTranslate(0,8,0) // translate to current ball position
 
             translateX = setTranslation(interval, ballAnimation.time0.distanceX)
             translateY = setTranslation(interval, ballAnimation.time0.distanceY)
             translateZ = setTranslation(interval, ballAnimation.time0.distanceZ)
+
+        }
+
+        if(24.0 < TIME && TIME <= 27.0) { // Time
+
+            interval = 1;
+
+            gTranslate(0,8,0) // translate to current ball position
+
+            translateX = setTranslation(interval, ballAnimation.time2.distanceX)
+            translateY = setTranslation(interval, ballAnimation.time2.distanceY)
+            translateZ = setTranslation(interval, ballAnimation.time2.distanceZ)
 
         }
 
