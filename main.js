@@ -438,7 +438,7 @@ function render() {
     if( animFlag )
     {
 
-        animateCamera();
+        //animateCamera();
 
         curTime = (new Date()).getTime() / 1000 ;
 
@@ -591,20 +591,24 @@ function render() {
                 time1: { rotXFrom: 0, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 40},
                 time2: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 40, rotZTo: -40},
                 time3: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: -40, rotZTo: 40},
+                time4: { rotXFrom: -90, rotXTo: -90, rotYFrom: 0, rotYTo: 0, rotZFrom: 40, rotZTo: 0},
+                time5: { rotXFrom: -90, rotXTo: 15, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
+                time6: { rotXFrom: 15, rotXTo: 15, rotYFrom: 0, rotYTo: 0, rotZFrom: 0, rotZTo: 0},
 
             },
             // Palm time series translations
             1: {
-                time1: { distanceX: 0, distanceY: 6, distanceZ: -3 },
-                time2: { distanceX: 0, distanceY: 0, distanceZ: 0 },
-                time3: { distanceX: 0, distanceY: 0, distanceZ: 0 },
+                time0: { distanceX: 0, distanceY: 0, distanceZ: 0 }, // default no translation
+                time1: { distanceX: 0, distanceY: 6, distanceZ: -4 },
+                time2: { distanceX: -1, distanceY: 1, distanceZ: 7 }, // palm facing forward is z +ve axis (-1,7,3)
+                time3: { distanceX: 0, distanceY: 0, distanceZ: -8 }, //
+
             },
 
         };
 
         if(TIME <= 3.0){
 
-            //interval = 2;
             const rotations = palmAnimation[0].time1;
             const translations = palmAnimation[1].time1;
 
@@ -614,9 +618,8 @@ function render() {
 
         if(3.0 < TIME && TIME <= 6.0){
 
-            //interval = 2;
             const rotations = palmAnimation[0].time2;
-            const translations = palmAnimation[1].time2;
+            const translations = palmAnimation[1].time0;
             const prevPos = palmAnimation[1].time1; // previous position of translation
 
             gTranslate(prevPos.distanceX, prevPos.distanceY, prevPos.distanceZ)
@@ -627,12 +630,81 @@ function render() {
 
         if(6.0 < TIME && TIME <= 9.0){
 
-            //interval = 2;
             const rotations = palmAnimation[0].time3;
-            const translations = palmAnimation[1].time3;
+            const translations = palmAnimation[1].time0;
             const prevPos = palmAnimation[1].time1; // previous position of translation (that was changed)
 
             gTranslate(prevPos.distanceX, prevPos.distanceY, prevPos.distanceZ)
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(9.0 < TIME && TIME <= 12.0){
+
+            interval = 2;
+            const rotations = palmAnimation[0].time4;
+            const translations = palmAnimation[1].time0;
+            const prevPos = palmAnimation[1].time1; // previous position of translation (that was changed)
+
+            gTranslate(prevPos.distanceX, prevPos.distanceY, prevPos.distanceZ)
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(12.0 < TIME && TIME <= 15.0){
+
+            const rotations = palmAnimation[0].time5;
+            const translations = palmAnimation[1].time0;
+            const prevPos = palmAnimation[1].time1; // previous position of translation (that was changed)
+
+            gTranslate(prevPos.distanceX, prevPos.distanceY, prevPos.distanceZ)
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(15.0 < TIME && TIME <= 18.0){
+
+            const rotations = palmAnimation[0].time6;
+            const translations = palmAnimation[1].time2;
+            const prevPos = palmAnimation[1].time1; // previous position of translation (that was changed)
+
+            gTranslate(prevPos.distanceX, prevPos.distanceY, prevPos.distanceZ)
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(18.0 < TIME && TIME <= 21.0){
+
+            const rotations = palmAnimation[0].time6;
+            const translations = palmAnimation[1].time3;
+
+            gTranslate(-1, 7, 3) // Hard coded from last translated distance
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(21.0 < TIME && TIME <= 24.0){
+
+            const rotations = palmAnimation[0].time6;
+            const translations = palmAnimation[1].time0;
+
+            gTranslate(-1, 7, -5) // Hard coded from last translated distance
+
+            struct = utilityRTI(rotations, translations, interval);
+
+        }
+
+        if(24.0 < TIME && TIME <= 27.0){
+
+            const rotations = palmAnimation[0].time6;
+            const translations = palmAnimation[1].time0;
+
+            gTranslate(-1, 7, -5) // Hard coded from last translated distance
 
             struct = utilityRTI(rotations, translations, interval);
 
@@ -649,17 +721,17 @@ function render() {
     function rotateFinger(knuckle_id, start_b, end_b, start_f, end_f, start_s, end_s, interval){
 
         if(knuckle_id === 1){
-            // Rotate the base knuckle 0-30 degrees in a 2-second interval
+            // Rotate the base knuckle 0-30 degrees in a 3-second interval
             return setRotation(start_b, end_b, interval);
         }
 
         if(knuckle_id === 2){
-            // Rotate the first knuckle 0-30 degrees in a 2-second interval
+            // Rotate the first knuckle 0-30 degrees in a 3-second interval
             return setRotation(start_f, end_f, interval);
         }
 
         if(knuckle_id === 3){
-            // Rotate the second knuckle 0-50 degrees in a 2-second interval
+            // Rotate the second knuckle 0-50 degrees in a 3-second interval
             return setRotation(start_s, end_s, interval);
         }
 
@@ -681,22 +753,47 @@ function render() {
                 // (firstRotFrom/firstRotTo) first knuckle rotation angle from --- to
                 // (secondRotFrom/secondRotTo) second knuckle rotation angle from --- to
                 time1: { baseRotFrom: 20, baseRotTo: 10, firstRotFrom: 20, firstRotTo: 10, secondRotFrom: 20, secondRotTo: 10 },
-                time2: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 10, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 }
+                time2: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 10, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 },
+                time3: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 15, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 }, // Hold position
+                time4: { baseRotFrom: 10, baseRotTo: 30, firstRotFrom: 10, firstRotTo: 25, secondRotFrom: 10, secondRotTo: 20 },
+                time5: { baseRotFrom: 30, baseRotTo: 40, firstRotFrom: 25, firstRotTo: 55, secondRotFrom: 20, secondRotTo: 50 },
+                time6: { baseRotFrom: 40, baseRotTo: 40, firstRotFrom: 55, firstRotTo: 55, secondRotFrom: 50, secondRotTo: 50 },
+                time7: { baseRotFrom: 40, baseRotTo: 10, firstRotFrom: 55, firstRotTo: 15, secondRotFrom: 50, secondRotTo: 20 },
+
             },
             // Finger 2
             2: {
                 time1: { baseRotFrom: 20, baseRotTo: 10, firstRotFrom: 20, firstRotTo: 10, secondRotFrom: 20, secondRotTo: 10 },
-                time2: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 10, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 }
+                time2: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 10, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 },
+                time3: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 15, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 }, // Hold position
+                time4: { baseRotFrom: 10, baseRotTo: 30, firstRotFrom: 10, firstRotTo: 35, secondRotFrom: 10, secondRotTo: 20 },
+                time5: { baseRotFrom: 30, baseRotTo: 40, firstRotFrom: 35, firstRotTo: 55, secondRotFrom: 20, secondRotTo: 50 },
+                time6: { baseRotFrom: 40, baseRotTo: 40, firstRotFrom: 55, firstRotTo: 55, secondRotFrom: 50, secondRotTo: 50 },
+                time7: { baseRotFrom: 40, baseRotTo: 10, firstRotFrom: 55, firstRotTo: 15, secondRotFrom: 50, secondRotTo: 20 },
+
             },
             // Finger 3
             3: {
                 time1: { baseRotFrom: 20, baseRotTo: 10, firstRotFrom: 20, firstRotTo: 10, secondRotFrom: 20, secondRotTo: 10 },
-                time2: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 10, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 }
+                time2: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 10, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 },
+                time3: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 15, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 }, // Hold position
+                time4: { baseRotFrom: 10, baseRotTo: 30, firstRotFrom: 10, firstRotTo: 35, secondRotFrom: 10, secondRotTo: 20 },
+                time5: { baseRotFrom: 30, baseRotTo: 40, firstRotFrom: 35, firstRotTo: 55, secondRotFrom: 20, secondRotTo: 50 },
+                time6: { baseRotFrom: 40, baseRotTo: 40, firstRotFrom: 55, firstRotTo: 55, secondRotFrom: 50, secondRotTo: 50 },
+                time7: { baseRotFrom: 40, baseRotTo: 10, firstRotFrom: 55, firstRotTo: 15, secondRotFrom: 50, secondRotTo: 20 },
+
             },
             // Finger 4
             4: {
                 time1: { baseRotFrom: 20, baseRotTo: 10, firstRotFrom: 20, firstRotTo: 10, secondRotFrom: 20, secondRotTo: 10 },
-                time2: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 10, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 }
+                time2: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 10, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 },
+                time3: { baseRotFrom: 10, baseRotTo: 10, firstRotFrom: 15, firstRotTo: 15, secondRotFrom: 10, secondRotTo: 10 }, // Hold position
+                time4: { baseRotFrom: 10, baseRotTo: 30, firstRotFrom: 10, firstRotTo: 35, secondRotFrom: 10, secondRotTo: 20 },
+                time5: { baseRotFrom: 30, baseRotTo: 40, firstRotFrom: 35, firstRotTo: 55, secondRotFrom: 20, secondRotTo: 50 },
+                time6: { baseRotFrom: 40, baseRotTo: 40, firstRotFrom: 55, firstRotTo: 55, secondRotFrom: 50, secondRotTo: 50 },
+                time7: { baseRotFrom: 40, baseRotTo: 10, firstRotFrom: 55, firstRotTo: 15, secondRotFrom: 50, secondRotTo: 20 },
+
+
             }
         };
 
@@ -721,6 +818,110 @@ function render() {
 
                 //interval = 2;
                 const rotations = fingerAnimation[finger_id].time2; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
+        if(6.0 < TIME && TIME <= 9.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                //interval = 2;
+                const rotations = fingerAnimation[finger_id].time3; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+        if(9.0 < TIME && TIME <= 12.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                //interval = 2;
+                const rotations = fingerAnimation[finger_id].time3; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
+        if(12.0 < TIME && TIME <= 15.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                //interval = 2;
+                const rotations = fingerAnimation[finger_id].time4; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
+        if(15.0 < TIME && TIME <= 18.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                //interval = 2;
+                const rotations = fingerAnimation[finger_id].time5; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
+        if(18.0 < TIME && TIME <= 21.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                //interval = 2;
+                const rotations = fingerAnimation[finger_id].time6; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
+        if(21.0 < TIME && TIME <= 24.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                //interval = 2;
+                const rotations = fingerAnimation[finger_id].time6; // Rotations per knuckle
+
+                rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                    rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                    rotations.secondRotTo, interval);
+
+            }
+
+        }
+
+        if(24.0 < TIME && TIME <= 27.0) { // Time
+
+            if (fingerAnimation[finger_id]) { // Finger
+
+                interval = 1;
+                const rotations = fingerAnimation[finger_id].time7; // Rotations per knuckle
 
                 rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
                     rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
@@ -842,33 +1043,179 @@ function render() {
         gPop() ;
     }
 
+    function animateThumb(knuckle_id){
+
+        let rotation = 0; // initialize rotation to default position
+        var interval = 3;
+
+        const thumbAnimation = { // Animation variable control
+            // Thumb time series rotations
+
+            1: { // knuckle 1 (base)
+                time1: {baseRotFrom: -40, baseRotTo: -70, firstRotFrom: 0, firstRotTo: 0, secondRotFrom: 0, secondRotTo: 0},
+                time2: {baseRotFrom: -70, baseRotTo: -70, firstRotFrom: 0, firstRotTo: 0, secondRotFrom: 0, secondRotTo: 0}
+            },
+
+            2: { //knuckle 2
+                time1: {baseRotFrom: 0, baseRotTo: 0, firstRotFrom: 20, firstRotTo: 30, secondRotFrom: 0, secondRotTo: 0},
+                time2: {baseRotFrom: 0, baseRotTo: 0, firstRotFrom: 30, firstRotTo: 30, secondRotFrom: 0, secondRotTo: 0}
+            }
+        };
+
+        if(15.0 < TIME && TIME <= 18.0) { // Time
+
+            //interval = 2;
+            const rotations = thumbAnimation[knuckle_id].time1; // Rotations per knuckle
+
+            rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                rotations.secondRotTo, interval);
+
+        }
+
+        if(18.0 < TIME && TIME <= 21.0) { // Time
+
+            //interval = 2;
+            const rotations = thumbAnimation[knuckle_id].time2; // Rotations per knuckle
+
+            rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                rotations.secondRotTo, interval);
+
+        }
+
+        if(18.0 < TIME && TIME <= 24.0) { // Time
+
+            //interval = 2;
+            const rotations = thumbAnimation[knuckle_id].time2; // Rotations per knuckle
+
+            rotation = rotateFinger(knuckle_id, rotations.baseRotFrom, rotations.baseRotTo,
+                rotations.firstRotFrom, rotations.firstRotTo, rotations.secondRotFrom,
+                rotations.secondRotTo, interval);
+
+        }
+
+        return rotation;
+    }
+
+    function drawThumb(){
+
+        var bRot = animateThumb(1);      // base knuckle rotation (front-to-back)
+        var knckOne = animateThumb(2);  // first knuckle rotation (front-to-back)
+
+        gScale(1/2, 1/1.4, 1/0.5);
+
+        gTranslate(2,-0.1,0);
+        gRotate(25, 1, 0, 0); // up-to-down
+        gRotate(bRot, 0, 1, 0); // front-to-back bRot
+
+        gScale(0.5,0.5,0.5);
+
+        setColor(vec4(0.4,0.4,0.4,1.0));
+        drawSphere(textureArray[4], "texture5", 4, gl.TEXTURE4);
+        gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
+
+        gPush() ; // first finger bone
+        {
+            gScale(1 / 0.5, 1 / 0.5, 1 / 0.5);
+
+            gTranslate(0.7, 0.6, 0);
+            gRotate(90, 1, 0, 0); // sets the position of the bone
+            gRotate(-50, 0, 1, 0); // sets the position of the bone
+
+
+            gScale(0.9, 0.9, 1.2);
+
+            setColor(vec4(0.4, 0.4, 0.4, 1.0));
+            drawCylinder(textureArray[1], "texture2", 1, gl.TEXTURE1); // Hand Texture
+            gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
+
+            gPush() ; // second finger knuckle
+            {
+                gScale(1/0.9, 1/0.9, 1/1.2);
+                gRotate(50, 0, 1, 0);
+                gRotate(-90, 1, 0, 0);
+
+                gTranslate(0.6, 0.5, 0);
+                gRotate(knckOne, 0, 0, 1); // knckOne front-to-back
+                gScale(0.45, 0.45, 0.45);
+
+                setColor(vec4(0.4, 0.4, 0.4, 1.0));
+                drawSphere(textureArray[4], "texture5", 4, gl.TEXTURE4);
+                gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
+
+                gPush() ; // first finger bone
+                {
+                    gScale(1 / 0.45, 1 / 0.45, 1 / 0.45);
+
+                    gTranslate(0.4, 0.45, 0.2);
+                    gRotate(90, 1, 0, 0);
+                    gRotate(-40, 0, 1, 0);
+                    gRotate(20, 1, 0, 0);
+
+                    gScale(0.9, 0.9, 0.7);
+
+                    setColor(vec4(0.4, 0.4, 0.4, 1.0));
+                    drawCylinder(textureArray[1], "texture2", 1, gl.TEXTURE1); // Hand Texture
+                    gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
+
+                    gPush(); // finger cap
+                    {
+                        gScale(1/0.9, 1/0.9, 1/0.7);
+                        gRotate(-90, 1, 0, 0)
+
+                        gTranslate(0, 0.55, 0);
+                        gRotate(-90, 1, 0, 0);
+                        gScale(0.45, 0.45, 0.4);
+
+                        setColor(vec4(0.4, 0.4, 0.4, 1.0));
+                        drawCone(textureArray[1], "texture2", 1, gl.TEXTURE1);
+                        gl.bindTexture(gl.TEXTURE_2D, null);
+
+                    }
+                    gPop();
+                }
+                gPop();
+            }
+            gPop();
+        }
+        gPop();
+    }
+
     function animateBall(){
 
         let translateX = 0;
         let translateY = 0;
         let translateZ = 0;
 
-        let interval = 0;
+        let interval = 3;
 
         const ballAnimation = { // Animation variable control
             // Palm time series translations
-            1: {
-                time1: { distanceX: 4, distanceY: 0, distanceZ: 0 },
-                //time2: { distanceX: 0, distanceY: 0, distanceZ: 0 },
-            },
+
+            time0: { distanceX: 0, distanceY: 0, distanceZ: 0 }, // Don't move
+            time1: { distanceX: 0, distanceY: 8, distanceZ: 0 },
 
         };
 
-        if(3.0 < TIME && TIME <= 6.0){
+        if(18.0 < TIME && TIME <= 21.0) { // Time
 
-            interval = 1;
-            const translations = ballAnimation[1].time1;
-
-            translateX = setTranslation(interval, translations.distanceX);
-            translateY = setTranslation(interval, translations.distanceY);
-            translateZ = setTranslation(interval, translations.distanceZ);
+            translateX = setTranslation(interval, ballAnimation.time1.distanceX)
+            translateY = setTranslation(interval, ballAnimation.time1.distanceY)
+            translateZ = setTranslation(interval, ballAnimation.time1.distanceZ)
 
         }
+
+        if(21.0 < TIME && TIME <= 24.0) { // Time
+
+            gTranslate(0,8,0)
+
+            translateX = setTranslation(interval, ballAnimation.time0.distanceX)
+            translateY = setTranslation(interval, ballAnimation.time0.distanceY)
+            translateZ = setTranslation(interval, ballAnimation.time0.distanceZ)
+
+        }
+
 
         gTranslate(translateX,translateY,translateZ);
 
@@ -909,7 +1256,7 @@ function render() {
 
     /************************* End of Scene Setup *************************/
 
-    /******************************Start of Code of Hand*******************************/
+    /******************************Start of Hand Code*******************************/
 
     gPush() ; // Start of Hand
     {
@@ -952,82 +1299,16 @@ function render() {
 
         gPush() ; // Thumb base
         {
-            gScale(1/2, 1/1.4, 1/0.5);
-            gTranslate(2,-0.1,0);
-            gScale(0.5,0.5,0.5);
-
-            setColor(vec4(0.4,0.4,0.4,1.0));
-            drawSphere(textureArray[4], "texture5", 4, gl.TEXTURE4);
-            gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
-
-            gPush() ; // first finger bone
-            {
-                gScale(1 / 0.5, 1 / 0.5, 1 / 0.5);
-
-                gTranslate(0.7, 0.6, 0);
-                gRotate(90, 1, 0, 0);
-                gRotate(-50, 0, 1, 0);
-
-                gScale(0.9, 0.9, 1.2);
-
-                setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                drawCylinder(textureArray[1], "texture2", 1, gl.TEXTURE1); // Hand Texture
-                gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
-
-                gPush() ; // second finger knuckle
-                {
-                    gScale(1/0.9, 1/0.9, 1/1.2);
-                    gRotate(50, 0, 1, 0);
-                    gRotate(-90, 1, 0, 0);
-
-                    gTranslate(0.6, 0.5, 0);
-                    gScale(0.45, 0.45, 0.45);
-
-                    setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                    drawSphere(textureArray[4], "texture5", 4, gl.TEXTURE4);
-                    gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
-
-                    gPush() ; // first finger bone
-                    {
-                        gScale(1 / 0.45, 1 / 0.45, 1 / 0.45);
-
-                        gTranslate(0.4, 0.45, 0.2);
-                        gRotate(90, 1, 0, 0);
-                        gRotate(-40, 0, 1, 0);
-                        gRotate(20, 1, 0, 0);
-
-                        gScale(0.9, 0.9, 0.7);
-
-                        setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                        drawCylinder(textureArray[1], "texture2", 1, gl.TEXTURE1); // Hand Texture
-                        gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
-
-                        gPush(); // finger cap
-                        {
-                            gScale(1/0.9, 1/0.9, 1/0.7);
-                            gRotate(-90, 1, 0, 0)
-
-                            gTranslate(0, 0.55, 0);
-                            gRotate(-90, 1, 0, 0)
-                            gScale(0.45, 0.45, 0.4);
-
-                            setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                            drawCone(textureArray[1], "texture2", 1, gl.TEXTURE1);
-                            gl.bindTexture(gl.TEXTURE_2D, null);
-
-                        }
-                        gPop();
-                    }
-                    gPop();
-                }
-                gPop();
-            }
-            gPop();
+            drawThumb();
         }
         gPop() ;
 
     }
     gPop() ; // End of Hand
+
+    /******************************End of Hand Code*******************************/
+
+    /******************************Start of Lamp Code*******************************/
 
     gPush(); // Lamp Base
     {
@@ -1134,6 +1415,8 @@ function render() {
         gPop();
     }
     gPop();
+
+    /******************************End of Lamp Code*******************************/
 
     if( animFlag )
         window.requestAnimFrame(render);
