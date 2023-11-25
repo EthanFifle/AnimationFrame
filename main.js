@@ -883,7 +883,7 @@ function render() {
 
         }
 
-        if(42.0 < TIME && TIME <= 45.0){
+        if(42.0 < TIME){
 
             interval = 2;
             const rotations = palmAnimation[0].time11;
@@ -1195,7 +1195,7 @@ function render() {
 
         }
 
-        if(42.0 < TIME && TIME <= 45.0) { // Time
+        if(42.0 < TIME) { // Time
 
             if (fingerAnimation[finger_id]) { // Finger
 
@@ -1436,7 +1436,7 @@ function render() {
 
         }
 
-        if(42.0 < TIME && TIME <= 45.0) { // Time
+        if(42.0 < TIME ) { // Time
 
             const rotations = thumbAnimation[knuckle_id].time4; // Rotations per knuckle
 
