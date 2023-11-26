@@ -95,6 +95,7 @@ main()
     vec4 c1,c2,c3,c4,c5,c6,c7 ;
 
     vec4 yellowColor = vec4(1.0, 1.0, 0.0, 1.0);
+    vec4 shadow = vec4(0.5, 0.5, 0.0, 1.0);
 
     fragColor = fColor;
     if( useTextures == 1)
@@ -107,7 +108,7 @@ main()
         c6 = texture( texture6, fTexCoord );
         c7 = texture( texture7, fTexCoord );
 
-        fragColor =  c1 + (c2 * yellowColor) + c3 + c4 + c5 + c6 + c7;
+        fragColor =  c1 + (c2 * yellowColor) + (c3 * shadow) + c4 + c5 + c6 + c7;
 
         // mix(c3, mix(c1, c2, 0.5), 0.7);
     }
@@ -130,27 +131,6 @@ Oops ... your browser doesn't support the HTML5 canvas element
 
 <br/>
 
-<div id="sliderX">
-    X-Roll -180 <input id="sliderXi" type="range"
-    min="-180" max="180" step="2" value="0"
-    />
-    180
-</div><br/>
-
-<div id="sliderY">
-    Y-Roll -180 <input id="sliderYi" type="range"
-    min="-180" max="180" step="2" value="0"
-    />
-    180
-</div><br/>
-
-<div id="sliderZ">
-    Z-Roll -180 <input id="sliderZi" type="range"
-    min="-180" max="180" step="2" value="0"
-    />
-    180
-</div><br/>
-
 <div id="animToggleButton">
     <input id="animToggleButtoni" type="button" value="Toggle Animation"
     />
@@ -160,7 +140,7 @@ Oops ... your browser doesn't support the HTML5 canvas element
 <div id="textureToggleButton">
     <input id="textureToggleButtoni" type="button" value="Toggle Textures"
     />
-    
+
 </div><br/>
 
 </body>
