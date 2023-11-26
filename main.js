@@ -13,6 +13,11 @@ var right = 6.0;
 var ytop = 6.0;
 var bottom = -6.0;
 
+// FPS code
+var frameCount = 0;
+var lastTime = 0;
+var fps = 0;
+var displayInterval = 2000; // Display every 2000 milliseconds (0.5 seconds)
 
 var lightPosition2 = vec4(100.0, 100.0, 100.0, 1.0 );
 var lightPosition = vec4(0.0, 0.0, 100.0, 1.0 );
@@ -1755,6 +1760,28 @@ function render() {
     gPop();
 
     /******************************End of Lamp Code*******************************/
+
+    function updateFPS() {
+        var now = performance.now();
+        var deltaTime = now - lastTime;
+
+        frameCount++;
+
+        if (deltaTime >= displayInterval) {
+            fps = frameCount / (deltaTime / 1000); // Calculate FPS over 2 seconds
+            frameCount = 0;
+            lastTime = now;
+
+            var roundedFPS = Math.round(fps);
+            console.log("FPS: " + fps.toFixed(2)); // Display in console
+            displayFPS(roundedFPS); // Update the display
+        }
+    }
+    function displayFPS(fps) {
+        document.getElementById('fpsCounter').innerText = 'FPS: ' + fps;
+    }
+
+    updateFPS();
 
     if( animFlag )
         window.requestAnimFrame(render);
