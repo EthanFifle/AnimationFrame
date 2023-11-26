@@ -138,6 +138,9 @@ function initTextures() {
     textureArray.push({}) ;
     loadFileTexture(textureArray[textureArray.length-1],"LampBase.jpg") ;
 
+    textureArray.push({}) ;
+    loadFileTexture(textureArray[textureArray.length-1],"LampLight.jpg") ;
+
     //textureArray.push({}) ;
     //loadImageTexture(textureArray[textureArray.length-1],image2) ;
 
@@ -578,7 +581,7 @@ function render() {
 
         if(18.0 < TIME && TIME <= 21.0){
 
-            distance -= setTranslation(interval, 0.05);
+            distance -= setTranslation(interval, 0.02);
 
             const rotations = cameraAnimation.time6;
 
@@ -588,7 +591,7 @@ function render() {
 
         if(21.0 < TIME && TIME <= 24.0){
 
-            distance += setTranslation(interval, 0.07);
+            distance += setTranslation(interval, 0.05);
 
             const rotations = cameraAnimation.time7;
 
@@ -614,7 +617,7 @@ function render() {
 
         if(30.0 < TIME && TIME <= 33.0){
 
-            distance += setTranslation(interval, 0.05);
+            distance += setTranslation(interval, 0.03);
 
             const rotations = cameraAnimation.time10;
 
@@ -1749,7 +1752,7 @@ function render() {
                                 gTranslate(0,-1,-1);
                                 gScale(0.9,0.9,0.9);
 
-                                drawSphere(textureArray[1], "texture2", 1, gl.TEXTURE1);
+                                drawSphere(textureArray[6], "texture7", 6, gl.TEXTURE1);
                                 gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
                             }
                             gPop();

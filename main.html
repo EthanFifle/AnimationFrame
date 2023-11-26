@@ -8,7 +8,6 @@ in vec3 vNormal;
 in vec4 vColor ;
 in vec2 vTexCoord ;
 
-
 out vec4 fColor;
 out vec2 fTexCoord ;
 out vec4 fColorFromVer ;
@@ -20,46 +19,54 @@ uniform mat4 projectionMatrix;
 uniform vec4 lightPosition;
 uniform float shininess;
 
-
-void
-main()
+void main()
 {
-    // Transform vertex normal into eye coordinates
+     // Transform vertex normal into eye coordinates
     vec3 pos = (modelViewMatrix * vPosition).xyz;
-    //vec3 N = normalize( (modelViewMatrix*vec4(vNormal,0.0)).xyz);
-    vec3 N = normalize( (normalMatrix*vec4(vNormal,0.0)).xyz);
-    
+    vec3 N = normalize((normalMatrix * vec4(vNormal, 0.0)).xyz);
 
-    vec3 L = vec3(normalize(lightPosition.xyz-pos)) ;
-    vec3 V = normalize(-pos.xyz) ;
-    vec3 R = reflect(-V, N) ;
+    vec3 L1 = vec3(normalize(lightPosition.xyz - pos));
+    vec3 L2 = vec3(normalize(vec4(18.0, 8.0, 1.0, 1.0) - vec4(pos, 1.0)));  // Second light source position
 
+    vec3 V = normalize(-pos);
+    vec3 R = reflect(-V, N);
 
     // Compute terms in the illumination equation
     vec4 ambient = ambientProduct;
 
-    float Kd = max( dot(L, N), 0.0 );
-    
-    fColor = ambient ;
+    float Kd1 = max(dot(L1, N), 0.0);
+    float Kd2 = max(dot(L2, N), 0.0);
+
+    fColor = ambient;
+
     vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
     vec4 specular = vec4(0.0, 0.0, 0.0, 1.0);
-   
-    diffuse = Kd*diffuseProduct;
-    float Ks = pow( max(dot(R, V), 0.0), shininess );
-    specular = Ks * specularProduct;
-    
-    if( dot(L, N) < 0.0 ) {
+
+    diffuse = Kd1 * diffuseProduct;
+    float Ks1 = pow(max(dot(R, V), 0.0), shininess);
+    specular = Ks1 * specularProduct;
+
+    if (dot(L1, N) < 0.0) {
         specular = vec4(0.0, 0.0, 0.0, 1.0);
     }
-    
+
+    diffuse += Kd2 * diffuseProduct;  // Add contribution from the second light source
+    float Ks2 = pow(max(dot(R, V), 0.0), shininess);
+    specular += Ks2 * specularProduct;  // Add contribution from the second light source
+
+    if (dot(L2, N) < 0.0) {
+        specular = vec4(0.0, 0.0, 0.0, 1.0);
+    }
+
     gl_Position = projectionMatrix * modelViewMatrix * vPosition;
-    
-    fTexCoord = vTexCoord ;
+
+    fTexCoord = vTexCoord;
     fColor = fColor + diffuse + specular;
     fColor.a = 1.0;
-	
-	fColorFromVer = vColor ;
+
+    fColorFromVer = vColor;
 }
+
 </script>
 
 <script id="fragment-shader" type="x-shader/x-fragment">#version 300 es
@@ -72,6 +79,7 @@ uniform sampler2D texture3;
 uniform sampler2D texture4;
 uniform sampler2D texture5;
 uniform sampler2D texture6;
+uniform sampler2D texture7;
 uniform int useTextures ;
 
 in vec4 fColor;
@@ -84,18 +92,23 @@ void
 main()
 {
 
-    vec4 c1,c2,c3,c4,c5,c6 ;
+    vec4 c1,c2,c3,c4,c5,c6,c7 ;
+
+    vec4 yellowColor = vec4(1.0, 1.0, 0.0, 1.0);
 
     fragColor = fColor;
     if( useTextures == 1)
     {
-        c1 = texture( texture1, fTexCoord );
-        c2 = texture( texture2, fTexCoord );
-        c3 = texture( texture3, fTexCoord );
-        c4 = texture( texture4, fTexCoord );
+        c1 = texture( texture1, fTexCoord ); // sunset
+        c2 = texture( texture2, fTexCoord ); // Metallic
+        c3 = texture( texture3, fTexCoord ); // TennisBall
+        c4 = texture( texture4, fTexCoord ); // Desk
         c5 = texture( texture5, fTexCoord );
         c6 = texture( texture6, fTexCoord );
-        fragColor = fragColor = c1 + c2 + c3 + c4 + c5 + c6;
+        c7 = texture( texture7, fTexCoord );
+
+        fragColor =  c1 + (c2 * yellowColor) + c3 + c4 + c5 + c6 + c7;
+
         // mix(c3, mix(c1, c2, 0.5), 0.7);
     }
     fragColor.a = 1.0 ;
