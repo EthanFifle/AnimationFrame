@@ -123,9 +123,6 @@ function loadImageTexture(tex, image) {
 function initTextures() {
 
     textureArray.push({}) ;
-    loadFileTexture(textureArray[textureArray.length-1],"sunset.bmp") ;
-
-    textureArray.push({}) ;
     loadFileTexture(textureArray[textureArray.length-1],"Metallic.jpg") ;
 
     textureArray.push({}) ;
@@ -143,8 +140,6 @@ function initTextures() {
     textureArray.push({}) ;
     loadFileTexture(textureArray[textureArray.length-1],"LampLight.jpg") ;
 
-    //textureArray.push({}) ;
-    //loadImageTexture(textureArray[textureArray.length-1],image2) ;
 
 }
 
@@ -1207,7 +1202,7 @@ function render() {
         gScale(0.6,0.6,0.6);
 
         setColor(vec4(0.4,0.4,0.4,1.0));
-        drawSphere(textureArray[4], "texture5", 4, gl.TEXTURE4); // Knuckles texture
+        drawSphere(textureArray[3], "texture4", 3, gl.TEXTURE4); // Knuckles texture
         gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
         gPush() ; // first finger bone
@@ -1219,7 +1214,7 @@ function render() {
             gScale(1.1,1.1,1.8);
 
             setColor(vec4(0.4,0.4,0.4,1.0));
-            drawCylinder(textureArray[1], "texture2", 1, gl.TEXTURE1); // Knuckles texture
+            drawCylinder(textureArray[0], "texture1", 0, gl.TEXTURE1); // Knuckles texture
             gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
             gPush() ; // second finger knuckle
@@ -1232,7 +1227,7 @@ function render() {
                 gScale(0.5, 0.5, 0.5);
 
                 setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                drawSphere(textureArray[4], "texture5", 4, gl.TEXTURE4);
+                drawSphere(textureArray[3], "texture4", 3, gl.TEXTURE4);
                 gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                 gPush(); // second finger bone
@@ -1244,7 +1239,7 @@ function render() {
                     gScale(1,1,1.5);
 
                     setColor(vec4(0.4,0.4,0.4,1.0));
-                    drawCylinder(textureArray[1], "texture2", 1, gl.TEXTURE1);
+                    drawCylinder(textureArray[0], "texture1", 0, gl.TEXTURE1);
                     gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                     gPush() ; // third finger knuckle
@@ -1257,7 +1252,7 @@ function render() {
                         gScale(0.5, 0.5, 0.5);
 
                         setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                        drawSphere(textureArray[4], "texture5", 4, gl.TEXTURE4); // Knuckle texture
+                        drawSphere(textureArray[3], "texture4", 3, gl.TEXTURE4); // Knuckle texture
                         gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                         gPush(); // third finger bone
@@ -1269,7 +1264,7 @@ function render() {
                             gScale(0.9, 0.9, 1.1);
 
                             setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                            drawCylinder(textureArray[1], "texture2", 1, gl.TEXTURE1); // Hand Texture
+                            drawCylinder(textureArray[0], "texture1", 0, gl.TEXTURE1); // Hand Texture
                             gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                             gPush(); // finger cap
@@ -1282,7 +1277,7 @@ function render() {
                                 gScale(0.5, 0.5, 0.4);
 
                                 setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                                drawCone(textureArray[1], "texture2", 1, gl.TEXTURE1);
+                                drawCone(textureArray[0], "texture1", 0, gl.TEXTURE1);
                                 gl.bindTexture(gl.TEXTURE_2D, null);
 
                             }
@@ -1442,7 +1437,7 @@ function render() {
         gScale(0.5,0.5,0.5);
 
         setColor(vec4(0.4,0.4,0.4,1.0));
-        drawSphere(textureArray[4], "texture5", 4, gl.TEXTURE4);
+        drawSphere(textureArray[3], "texture4", 3, gl.TEXTURE4);
         gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
         gPush() ; // first finger bone
@@ -1457,7 +1452,7 @@ function render() {
             gScale(0.9, 0.9, 1.2);
 
             setColor(vec4(0.4, 0.4, 0.4, 1.0));
-            drawCylinder(textureArray[1], "texture2", 1, gl.TEXTURE1); // Hand Texture
+            drawCylinder(textureArray[0], "texture1", 0, gl.TEXTURE1); // Hand Texture
             gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
             gPush() ; // second finger knuckle
@@ -1471,7 +1466,7 @@ function render() {
                 gScale(0.45, 0.45, 0.45);
 
                 setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                drawSphere(textureArray[4], "texture5", 4, gl.TEXTURE4);
+                drawSphere(textureArray[3], "texture4", 3, gl.TEXTURE4);
                 gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                 gPush() ; // first finger bone
@@ -1486,7 +1481,7 @@ function render() {
                     gScale(0.9, 0.9, 0.7);
 
                     setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                    drawCylinder(textureArray[1], "texture2", 1, gl.TEXTURE1); // Hand Texture
+                    drawCylinder(textureArray[0], "texture1", 0, gl.TEXTURE1); // Hand Texture
                     gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                     gPush(); // finger cap
@@ -1499,7 +1494,7 @@ function render() {
                         gScale(0.45, 0.45, 0.4);
 
                         setColor(vec4(0.4, 0.4, 0.4, 1.0));
-                        drawCone(textureArray[1], "texture2", 1, gl.TEXTURE1);
+                        drawCone(textureArray[0], "texture1", 0, gl.TEXTURE1);
                         gl.bindTexture(gl.TEXTURE_2D, null);
 
                     }
@@ -1581,7 +1576,7 @@ function render() {
         setColor(vec4(0.4,0.4,0.4,1.0));
 
         //drawSphere();
-        drawSphere(textureArray[2], "texture3", 2, gl.TEXTURE2);
+        drawSphere(textureArray[1], "texture2", 1, gl.TEXTURE2);
         gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
     }
     gPop() ;
@@ -1592,7 +1587,7 @@ function render() {
         gScale(19,2,10);
         setColor(vec4(0.0,0.0,0.0,1.0));
 
-        drawCube(textureArray[3], "texture4", 3, gl.TEXTURE3);
+        drawCube(textureArray[2], "texture3", 2, gl.TEXTURE3);
         gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
     }
     gPop() ;
@@ -1611,7 +1606,7 @@ function render() {
 
         setColor(vec4(0.0,1.0,0.0,1.0)) ;
 
-        drawCube(textureArray[1],"texture2", 1, gl.TEXTURE1);
+        drawCube(textureArray[0],"texture1", 0, gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
 
@@ -1659,7 +1654,7 @@ function render() {
         gRotate(70, 0,1,0);
         gScale(4,0.3,2);
 
-        drawCube(textureArray[5], "texture6", 5, gl.TEXTURE5);
+        drawCube(textureArray[4], "texture5", 4, gl.TEXTURE5);
         gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
         gPush(); // aesthetic base
@@ -1669,7 +1664,7 @@ function render() {
             gTranslate(0,0.3,0);
             gScale(1.5,0.3,0.8);
 
-            drawCube(textureArray[5], "texture6", 5, gl.TEXTURE5);
+            drawCube(textureArray[4], "texture5", 4, gl.TEXTURE5);
             gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
             gPush(); // aesthetic base 2
@@ -1680,7 +1675,7 @@ function render() {
                 gRotate(90, 0,1,0);
                 gScale(0.5,0.5,1.1);
 
-                drawCylinder(textureArray[5], "texture6", 5, gl.TEXTURE5);
+                drawCylinder(textureArray[4], "texture5", 4, gl.TEXTURE5);
                 gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                 gPush(); // first base arm
@@ -1693,7 +1688,7 @@ function render() {
 
                     gScale(0.5,0.5,8.5);
 
-                    drawCylinder(textureArray[5], "texture6", 5, gl.TEXTURE5);
+                    drawCylinder(textureArray[4], "texture5", 4, gl.TEXTURE5);
                     gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                     gPush(); // second arm
@@ -1705,7 +1700,7 @@ function render() {
                         gRotate(50, 1,0,0);
                         gScale(0.5,0.5,10);
 
-                        drawCylinder(textureArray[5], "texture6", 5, gl.TEXTURE5);
+                        drawCylinder(textureArray[4], "texture5", 4, gl.TEXTURE5);
                         gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                         gPush(); // Lamp Head
@@ -1717,7 +1712,7 @@ function render() {
                             gRotate(-40, 1,0,0);
                             gScale(1.5,1.5,5);
 
-                            drawCone(textureArray[4], "texture5", 4, gl.TEXTURE4);
+                            drawCone(textureArray[3], "texture4", 3, gl.TEXTURE4);
                             gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
 
                             gPush(); // Lamp light
@@ -1728,7 +1723,7 @@ function render() {
                                 gTranslate(0,-1,-1);
                                 gScale(0.9,0.9,0.9);
 
-                                drawSphere(textureArray[6], "texture7", 6, gl.TEXTURE1);
+                                drawSphere(textureArray[5], "texture6", 5, gl.TEXTURE1);
                                 gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
                             }
                             gPop();
@@ -1748,7 +1743,7 @@ function render() {
                     gRotate(120, 1,0,0);
                     gScale(0.5,0.5,8.5);
 
-                    drawCylinder(textureArray[5], "texture6", 5, gl.TEXTURE5);
+                    drawCylinder(textureArray[4], "texture5", 4, gl.TEXTURE5);
                     gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the texture
                 }
                 gPop();

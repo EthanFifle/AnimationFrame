@@ -26,7 +26,7 @@ void main()
     vec3 N = normalize((normalMatrix * vec4(vNormal, 0.0)).xyz);
 
     vec3 L1 = vec3(normalize(lightPosition.xyz - pos));
-    vec3 L2 = vec3(normalize(vec4(18.0, 8.0, 1.0, 1.0) - vec4(pos, 1.0)));  // Second light source position
+    vec3 L2 = vec3(normalize(vec4(18.0, 8.0, 1.0, 1.0) - vec4(pos, 1.0)));  // Second light source position (from lamp)
 
     vec3 V = normalize(-pos);
     vec3 R = reflect(-V, N);
@@ -50,9 +50,10 @@ void main()
         specular = vec4(0.0, 0.0, 0.0, 1.0);
     }
 
-    diffuse += Kd2 * diffuseProduct;  // Add contribution from the second light source
+    // same procedure for light source 2?
+    diffuse += Kd2 * diffuseProduct;
     float Ks2 = pow(max(dot(R, V), 0.0), shininess);
-    specular += Ks2 * specularProduct;  // Add contribution from the second light source
+    specular += Ks2 * specularProduct;
 
     if (dot(L2, N) < 0.0) {
         specular = vec4(0.0, 0.0, 0.0, 1.0);
@@ -79,7 +80,6 @@ uniform sampler2D texture3;
 uniform sampler2D texture4;
 uniform sampler2D texture5;
 uniform sampler2D texture6;
-uniform sampler2D texture7;
 uniform int useTextures ;
 
 in vec4 fColor;
@@ -92,7 +92,7 @@ void
 main()
 {
 
-    vec4 c1,c2,c3,c4,c5,c6,c7 ;
+    vec4 c1,c2,c3,c4,c5,c6 ;
 
     vec4 yellowColor = vec4(1.0, 1.0, 0.0, 1.0);
     vec4 shadow = vec4(0.5, 0.5, 0.0, 1.0);
@@ -100,17 +100,16 @@ main()
     fragColor = fColor;
     if( useTextures == 1)
     {
-        c1 = texture( texture1, fTexCoord ); // sunset
-        c2 = texture( texture2, fTexCoord ); // Metallic
-        c3 = texture( texture3, fTexCoord ); // TennisBall
-        c4 = texture( texture4, fTexCoord ); // Desk
-        c5 = texture( texture5, fTexCoord );
-        c6 = texture( texture6, fTexCoord );
-        c7 = texture( texture7, fTexCoord );
+        c1 = texture( texture1, fTexCoord ); // Metallic
+        c2 = texture( texture2, fTexCoord ); // TennisBall
+        c3 = texture( texture3, fTexCoord ); // Desk
+        c4 = texture( texture4, fTexCoord ); // Knuckles
+        c5 = texture( texture5, fTexCoord ); // LampBase
+        c6 = texture( texture6, fTexCoord ); // LampLight
 
-        fragColor =  c1 + (c2 * yellowColor) + (c3 * shadow) + c4 + c5 + c6 + c7;
+        fragColor =  (c1 * yellowColor) + (c2 * shadow) + c3 + c4 + c5 + c6;
+        // make the hand yellow and the ball slightly darker
 
-        // mix(c3, mix(c1, c2, 0.5), 0.7);
     }
 
     // Add a red tint to the scene
